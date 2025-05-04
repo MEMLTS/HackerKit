@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Tool1 from './components/Tool1.vue';
+import Hash from './components/hash.vue';
 import Tool2 from './components/Tool2.vue';
 import Welcome from './components/Welcome.vue';
 import SystemInfo from './components/systemInfo.vue';
@@ -14,9 +14,9 @@ const router = createRouter({
       component: Welcome
     },
     {
-      path: '/tool1',
-      name: 'Tool1',
-      component: Tool1
+      path: '/hash',
+      name: 'Hash',
+      component: Hash
     },
     {
       path: '/tool2',

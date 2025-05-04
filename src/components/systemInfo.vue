@@ -28,9 +28,8 @@ const fetchSystemInfo = async () => {
         } else {
             console.error('Unexpected response type:', typeof response);
         }
-    } catch (error) {
-        console.error('Failed to fetch system info:', error);
-    } finally {
+    } catch (error) { }
+    finally {
         loading.value = false;
     }
 };

@@ -14,6 +14,7 @@ import sunIcon from './assets/icons/sun.svg';
 import moonIcon from './assets/icons/moon.svg';
 import moreIcon from './assets/icons/more.svg';
 import systemInfoIcon from './assets/icons/systemInfo.svg';
+import hashIcon from './assets/icons/hash.svg';
 
 const router = useRouter();
 const isSidebarCollapsed = ref(false);
@@ -75,7 +76,7 @@ const toolGroups = ref<ToolGroup[]>([
     icon: wrenchIcon,
     isCollapsed: false,
     tools: [
-      { name: '工具1', icon: toolsIcon, route: '/tool1' },
+      { name: 'Hash工具', icon: hashIcon, route: '/hash' },
       { name: '工具2', icon: settingsIcon, route: '/tool2' },
       { name: '编码解码', icon: code, route: '/encoder-decoder' },
     ]
@@ -85,7 +86,7 @@ const toolGroups = ref<ToolGroup[]>([
     icon: systemIcon,
     isCollapsed: false,
     tools: [
-      { name: '工具1', icon: toolsIcon, route: '/tool1' }
+      { name: '工具1', icon: toolsIcon, route: '/hash' }
     ]
   },
   {
