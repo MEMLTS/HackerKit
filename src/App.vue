@@ -15,6 +15,7 @@ import moonIcon from './assets/icons/moon.svg';
 import moreIcon from './assets/icons/more.svg';
 import systemInfoIcon from './assets/icons/systemInfo.svg';
 import hashIcon from './assets/icons/hash.svg';
+import EncryptionIcon from './assets/icons/encryption.svg';
 
 const router = useRouter();
 const isSidebarCollapsed = ref(false);
@@ -77,7 +78,7 @@ const toolGroups = ref<ToolGroup[]>([
     isCollapsed: false,
     tools: [
       { name: 'Hash工具', icon: hashIcon, route: '/hash' },
-      { name: '工具2', icon: settingsIcon, route: '/tool2' },
+      { name: '加密解密', icon: EncryptionIcon, route: '/tool2' },
       { name: '编码解码', icon: code, route: '/encoder-decoder' },
     ]
   },
@@ -94,8 +95,8 @@ const toolGroups = ref<ToolGroup[]>([
     icon: moreIcon,
     isCollapsed: false,
     tools: [
-      { name: '关于', icon: aboutIcon, route: '/about' },
       { name: '系统信息', icon: systemInfoIcon, route: '/system-info' },
+      { name: '关于', icon: aboutIcon, route: '/about' },
     ]
   }
 ]);
@@ -170,7 +171,13 @@ const toggleGroup = (group: ToolGroup) => {
 .main-content {
   flex: 1;
   padding: 2rem;
-  overflow-y: auto;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.main-content::-webkit-scrollbar {
+  display: none;
 }
 
 .fade-enter-active,
@@ -299,7 +306,13 @@ const toggleGroup = (group: ToolGroup) => {
 .main-content {
   flex: 1;
   padding: 2rem;
-  overflow-y: auto;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.main-content::-webkit-scrollbar {
+  display: none;
 }
 
 .fade-enter-active,

@@ -14,11 +14,7 @@
       {
         "title": "hackerkit",
         "width": 890,
-        "height": 690,
-        "resizable": true,
-        "transparent": false,
-        "fullscreen": false,
-        "decorations": true
+        "height": 690
       }
     ],
     "security": {

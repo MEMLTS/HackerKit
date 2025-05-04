@@ -172,8 +172,7 @@ const copyOutput = () => {
                 <h3>编码解码功能</h3>
                 <div class="card-content">
                     <div class="input-group">
-                        <label>输入文本：</label>
-                        <textarea v-model="inputText" rows="3"></textarea>
+                        <textarea v-model="inputText" placeholder="输入..." rows="3"></textarea>
                     </div>
                     <div class="button-group">
                         <button class="encode-btn" @click="encode">编码</button>
@@ -182,8 +181,7 @@ const copyOutput = () => {
                         <button class="copy-btn" @click="copyOutput">复制结果</button>
                     </div>
                     <div class="output-group">
-                        <label>输出结果：</label>
-                        <textarea v-model="outputText" rows="3" readonly></textarea>
+                        <textarea v-model="outputText" placeholder="输出..." rows="6" readonly></textarea>
                     </div>
                 </div>
             </div>
