@@ -6,7 +6,6 @@ import './assets/styles/theme.css';
 // 导入SVG图标
 import wrenchIcon from './assets/icons/wrench.svg';
 import toolsIcon from './assets/icons/tools.svg';
-import settingsIcon from './assets/icons/settings.svg';
 import systemIcon from './assets/icons/system.svg';
 import code from './assets/icons/code.svg';
 import aboutIcon from './assets/icons/about.svg';
