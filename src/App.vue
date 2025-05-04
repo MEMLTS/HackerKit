@@ -9,9 +9,11 @@ import toolsIcon from './assets/icons/tools.svg';
 import settingsIcon from './assets/icons/settings.svg';
 import systemIcon from './assets/icons/system.svg';
 import code from './assets/icons/code.svg';
-
+import aboutIcon from './assets/icons/about.svg';
 import sunIcon from './assets/icons/sun.svg';
 import moonIcon from './assets/icons/moon.svg';
+import moreIcon from './assets/icons/more.svg';
+import systemInfoIcon from './assets/icons/systemInfo.svg';
 
 const router = useRouter();
 const isSidebarCollapsed = ref(false);
@@ -82,7 +84,18 @@ const toolGroups = ref<ToolGroup[]>([
     name: '系统工具',
     icon: systemIcon,
     isCollapsed: false,
-    tools: []
+    tools: [
+      { name: '工具1', icon: toolsIcon, route: '/tool1' }
+    ]
+  },
+  {
+    name: '更多',
+    icon: moreIcon,
+    isCollapsed: false,
+    tools: [
+      { name: '关于', icon: aboutIcon, route: '/about' },
+      { name: '系统信息', icon: systemInfoIcon, route: '/system-info' },
+    ]
   }
 ]);
 
@@ -129,12 +142,8 @@ const toggleGroup = (group: ToolGroup) => {
             </span>
           </div>
           <div class="group-tools" :class="{ 'collapsed': group.isCollapsed }">
-            <a
-              v-for="tool in group.tools"
-              :key="tool.route"
-              :class="['nav-item', { active: $route.path === tool.route }]"
-              @click="router.push(tool.route)"
-            >
+            <a v-for="tool in group.tools" :key="tool.route"
+              :class="['nav-item', { active: $route.path === tool.route }]" @click="router.push(tool.route)">
               <img class="tool-icon" :src="tool.icon" alt="">
               <span class="tool-name" v-show="!isSidebarCollapsed">{{ tool.name }}</span>
             </a>
@@ -155,7 +164,6 @@ const toggleGroup = (group: ToolGroup) => {
 </template>
 
 <style scoped>
-
 @import './assets/styles/global.css';
 
 .main-content {
