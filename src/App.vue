@@ -156,85 +156,39 @@ const toggleGroup = (group: ToolGroup) => {
 
 <style scoped>
 
-.app-container {
-  display: flex;
-  min-height: 100vh;
-  background: var(--bg-color);
-  color: var(--text-color);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-}
+@import './assets/styles/global.css';
 
-.sidebar {
-  width: 250px;
-  background: var(--sidebar-bg);
-  border-right: 1px solid var(--sidebar-border);
-  transition: width 0.3s ease, transform 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  overflow-x: hidden;
-}
-
-.sidebar.collapsed {
-  width: 60px;
-}
-
-.sidebar-header {
-  padding: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.app-title {
-  font-size: 1.2rem;
-  margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  transition: opacity 0.3s ease;
-}
-
-.collapsed .app-title {
-  opacity: 0;
-  width: 0;
-  margin: 0;
-}
-
-.collapse-btn, .theme-toggle-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-  margin-left: 0.5rem;
-}
-
-.collapse-btn:hover, .theme-toggle-btn:hover {
-  background-color: var(--hover-bg);
-}
-
-.sidebar-nav {
-  padding: 1rem 0;
+.main-content {
   flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
 }
 
-.tool-group {
-  margin-bottom: 0.5rem;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
 }
 
-.group-header {
-  display: flex;
-  align-items: center;
-  padding: 0.75rem 1rem;
-  color: var(--text-color);
-  cursor: pointer;
-  transition: background-color 0.2s;
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    height: 100vh;
+    z-index: 1000;
+    transform: translateX(0);
+  }
+
+  .sidebar.collapsed {
+    transform: translateX(-100%);
+  }
+
+  .main-content {
+    margin-left: 0;
+  }
 }
 
 .group-header:hover {

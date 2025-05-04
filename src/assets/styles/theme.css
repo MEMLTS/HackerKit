@@ -20,10 +20,73 @@
   --hover-bg: rgba(255, 255, 255, 0.05);
   --active-bg: rgba(0, 120, 212, 0.2);
   --active-color: #4da6ff;
+  --input-bg: #2d2d2d;
+  --input-text: #ffffff;
+  --input-border: #4d4d4d;
+  --input-focus-border: #0078d4;
+}
+
+/* 输入框样式 */
+input,
+textarea {
+  background-color: var(--input-bg);
+  color: var(--input-text);
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  padding: 8px;
+  transition: border-color 0.2s ease;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--input-focus-border);
+  box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
+}
+
+/* 动画关键帧 */
+@keyframes scaleUp {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+/* 按钮动画 */
+button {
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+button:hover {
+  animation: scaleUp 0.2s ease forwards;
+}
+
+/* 侧边栏动画 */
+.sidebar {
+  transition: width 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* 工具卡片动画 */
+.tool-container {
+  animation: fadeIn 0.3s ease;
 }
 
 /* 全局样式 */
-html, body {
+html,
+body {
   overflow: hidden;
   margin: 0;
   padding: 0;

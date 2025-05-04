@@ -1,3 +1,28 @@
+@font-face {
+  font-family: 'AlimamaFangYuanTiVF-Thin';
+  src: url('../AlimamaFangYuanTiVF-Thin.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+  --font-family: 'AlimamaFangYuanTiVF-Thin', sans-serif;
+}
+
+body {
+  font-family: var(--font-family);
+}
+
+.app-title,
+.group-header,
+.group-name,
+.nav-item,
+.tool-header h2,
+.feature-card h3,
+.card-content {
+  font-family: var(--font-family);
+}
+
 .app-container {
   display: flex;
   min-height: 100vh;
@@ -5,13 +30,31 @@
   color: var(--text-color);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dark-mode-transition {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg-color);
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.dark-mode-transition.active {
+  opacity: 1;
 }
 
 .sidebar {
   width: 250px;
   background: var(--sidebar-bg);
   border-right: 1px solid var(--sidebar-border);
-  transition: width 0.3s ease, transform 0.3s ease;
+  transition: width 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
@@ -44,7 +87,8 @@
   margin: 0;
 }
 
-.collapse-btn, .theme-toggle-btn {
+.collapse-btn,
+.theme-toggle-btn {
   background: none;
   border: none;
   cursor: pointer;
@@ -54,8 +98,11 @@
   margin-left: 0.5rem;
 }
 
-.collapse-btn:hover, .theme-toggle-btn:hover {
+.collapse-btn:hover,
+.theme-toggle-btn:hover {
   background-color: var(--hover-bg);
+  transform: scale(1.1);
+  transition: all 0.2s ease;
 }
 
 .sidebar-nav {
@@ -153,6 +200,8 @@
 
 .nav-item:hover {
   background-color: var(--hover-bg);
+  transform: translateX(5px);
+  transition: all 0.2s ease;
 }
 
 .nav-item.active {
