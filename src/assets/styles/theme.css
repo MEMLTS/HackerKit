@@ -1,0 +1,30 @@
+:root {
+  --bg-color: #ffffff;
+  --text-color: #1a1a1a;
+  --sidebar-bg: rgba(255, 255, 255, 0.8);
+  --sidebar-border: rgba(0, 0, 0, 0.1);
+  --card-bg: rgba(255, 255, 255, 0.9);
+  --card-border: rgba(0, 0, 0, 0.1);
+  --hover-bg: rgba(0, 0, 0, 0.05);
+  --active-bg: rgba(0, 120, 212, 0.1);
+  --active-color: #0078d4;
+}
+
+:root.dark {
+  --bg-color: #1a1a1a;
+  --text-color: #ffffff;
+  --sidebar-bg: rgba(26, 26, 26, 0.8);
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --card-bg: rgba(26, 26, 26, 0.9);
+  --card-border: rgba(255, 255, 255, 0.1);
+  --hover-bg: rgba(255, 255, 255, 0.05);
+  --active-bg: rgba(0, 120, 212, 0.2);
+  --active-color: #4da6ff;
+}
+
+/* 全局样式 */
+html, body {
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
