@@ -265,6 +265,7 @@ const toggleGroup = (group: ToolGroup) => {
   max-height: 0;
   opacity: 0;
   transform: translateY(-10px);
+  pointer-events: none;
 }
 
 .nav-item {
