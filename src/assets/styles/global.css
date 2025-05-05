@@ -270,3 +270,37 @@ body {
     margin-left: 0;
   }
 }
+
+.encryption-settings,
+.key-settings,
+.data-format-settings {
+    margin-bottom: 1.5rem;
+}
+
+.setting-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+
+.setting-group label {
+    min-width: 80px;
+}
+
+select,
+input {
+    padding: 0.5rem;
+    border: 1px solid var(--card-border);
+    border-radius: 4px;
+    background: var(--card-bg);
+    color: var(--text-color);
+}
+
+select {
+    min-width: 120px;
+}
+
+input {
+    flex: 1;
+}

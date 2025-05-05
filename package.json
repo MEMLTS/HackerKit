@@ -13,6 +13,7 @@
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-opener": "^2",
     "crypto-js": "^4.2.0",
+    "diff": "^7.0.0",
     "protobufjs": "^7.5.0",
     "punycode": "^2.3.1",
     "vue": "^3.5.13",
@@ -21,6 +22,7 @@
   "devDependencies": {
     "@tauri-apps/cli": "^2",
     "@types/crypto-js": "^4.2.2",
+    "@types/diff": "^7.0.2",
     "@types/node": "^22.15.3",
     "@vitejs/plugin-vue": "^5.2.1",
     "typescript": "~5.6.2",

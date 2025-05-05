@@ -79,21 +79,6 @@ const timeLeft = ref(props.duration);
 let timer: number | null = null;
 let progressTimer: number | null = null;
 
-const iconClass = computed(() => {
-  switch (props.type) {
-    case 'info':
-      return 'fas fa-info-circle';
-    case 'success':
-      return 'fas fa-check-circle';
-    case 'warning':
-      return 'fas fa-exclamation-triangle';
-    case 'error':
-      return 'fas fa-times-circle';
-    default:
-      return 'fas fa-info-circle';
-  }
-});
-
 const progressStyle = computed(() => {
   const progress = (timeLeft.value / props.duration) * 100;
   return {

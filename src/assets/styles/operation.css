@@ -1,0 +1,63 @@
+
+.operation-toggle {
+    display: flex;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+}
+
+.operation-toggle button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: #f5f5f5;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.operation-toggle button.active {
+    background: #3a86ff;
+    color: white;
+}
+
+.settings-group {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.setting {
+    flex: 1;
+}
+
+.setting label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #555;
+}
+
+.setting select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: white;
+}
+
+.input-group label,
+.output-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #555;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #3a86ff;
+    box-shadow: 0 0 0 2px rgba(58, 134, 255, 0.2);
+}

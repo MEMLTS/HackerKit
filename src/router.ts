@@ -5,6 +5,8 @@ import Welcome from './components/Welcome.vue';
 import SystemInfo from './components/systemInfo.vue';
 import EncoderDecoder from './components/EncoderDecoder.vue';
 import About from './components/about.vue';
+import textCompare from './components/textCompare.vue';
+import Gzip from './components/gzip.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -28,6 +30,16 @@ const router = createRouter({
       path: '/encoder-decoder',
       name: 'EncoderDecoder',
       component: EncoderDecoder
+    },
+    {
+      path: '/text-compare',
+      name: 'textCompare',
+      component: textCompare
+    },
+    {
+      path: '/gzip',
+      name: 'GZIP',
+      component: Gzip
     },
     {
       path: '/system-info',

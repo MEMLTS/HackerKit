@@ -15,6 +15,8 @@ import moreIcon from './assets/icons/more.svg';
 import systemInfoIcon from './assets/icons/systemInfo.svg';
 import hashIcon from './assets/icons/hash.svg';
 import EncryptionIcon from './assets/icons/encryption.svg';
+import txtIcon from './assets/icons/txt.svg';
+import gzipIcon from './assets/icons/mm-gzip.svg';
 
 const router = useRouter();
 const isSidebarCollapsed = ref(false);
@@ -79,6 +81,9 @@ const toolGroups = ref<ToolGroup[]>([
       { name: 'Hash工具', icon: hashIcon, route: '/hash' },
       { name: '加密解密', icon: EncryptionIcon, route: '/symmetricEncryption' },
       { name: '编码解码', icon: code, route: '/encoder-decoder' },
+      { name: '文本对比', icon: txtIcon, route: '/text-compare' },
+      { name: 'Gzip解压', icon: gzipIcon, route: '/gzip'}
+      //{ name: '时间戳', icon: toolsIcon, route: '/timestamp' }
     ]
   },
   {

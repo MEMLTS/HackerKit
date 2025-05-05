@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import CustomModal from '../view/CustomModal.vue';
+import showMessage from '../utils/MessageService';
 import CryptoJS from 'crypto-js';
 import '@assets/styles/tool.css';
-import showMessage from '../utils/MessageService';
+
 
 // 定义加密类型和模式的类型
 type EncryptionType = 'aes' | 'des' | '3des';
@@ -50,9 +51,9 @@ const encryptionModes = [
 
 // 密钥长度选项
 const keyLengths = [
-    { value: 128, label: '128位 (16字节)' },
-    { value: 192, label: '192位 (24字节)' },
-    { value: 256, label: '256位 (32字节)' }
+    { value: 128, label: '128位(16byte)' },
+    { value: 192, label: '192位(24byte)' },
+    { value: 256, label: '256位(32byte)' }
 ];
 
 // 格式选项
@@ -337,37 +338,4 @@ const copyOutput = () => {
 </template>
 
 <style scoped>
-.encryption-settings,
-.key-settings,
-.data-format-settings {
-    margin-bottom: 1.5rem;
-}
-
-.setting-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-    gap: 1rem;
-}
-
-.setting-group label {
-    min-width: 80px;
-}
-
-select,
-input {
-    padding: 0.5rem;
-    border: 1px solid var(--card-border);
-    border-radius: 4px;
-    background: var(--card-bg);
-    color: var(--text-color);
-}
-
-select {
-    min-width: 120px;
-}
-
-input {
-    flex: 1;
-}
 </style>
