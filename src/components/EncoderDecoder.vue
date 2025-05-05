@@ -175,11 +175,11 @@ const copyOutput = () => {
         <div class="tool-header">
             <h2>{{ title }}</h2>
         </div>
-        <div class="feature-card">
+        <!-- <div class="feature-card">
         <div class="card-content">
           <p>这里是编码解码工具主要功能区域</p>
         </div>
-    </div>
+    </div> -->
         <div class="tool-content">
             <div class="feature-card">
                 <div class="encode-type-selector">
