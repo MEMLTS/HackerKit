@@ -17,6 +17,7 @@ import hashIcon from './assets/icons/hash.svg';
 import EncryptionIcon from './assets/icons/encryption.svg';
 import txtIcon from './assets/icons/txt.svg';
 import gzipIcon from './assets/icons/mm-gzip.svg';
+import jwtIcon from './assets/icons/jwt.svg';
 
 const router = useRouter();
 const isSidebarCollapsed = ref(false);
@@ -82,7 +83,8 @@ const toolGroups = ref<ToolGroup[]>([
       { name: '加密解密', icon: EncryptionIcon, route: '/symmetricEncryption' },
       { name: '编码解码', icon: code, route: '/encoder-decoder' },
       { name: '文本对比', icon: txtIcon, route: '/text-compare' },
-      { name: 'Gzip解压', icon: gzipIcon, route: '/gzip'}
+      { name: 'Gzip工具', icon: gzipIcon, route: '/gzip' },
+      { name: 'JWT解析器', icon: jwtIcon, route: '/jwt' },
       //{ name: '时间戳', icon: toolsIcon, route: '/timestamp' }
     ]
   },
@@ -149,7 +151,7 @@ const toggleGroup = (group: ToolGroup) => {
           </div>
           <div class="group-tools" :class="{ 'collapsed': group.isCollapsed }">
             <a v-for="tool in group.tools" :key="tool.route"
-              :class="['nav-item', { active: $route.path === tool.route }]" @click="router.push(tool.route)">
+              :class="['nav-item', { active: $route.path === tool.route }]" @click="() => { if (router && tool && tool.route) router.push(tool.route) }">
               <img class="tool-icon" :src="tool.icon" alt="">
               <span class="tool-name" v-show="!isSidebarCollapsed">{{ tool.name }}</span>
             </a>

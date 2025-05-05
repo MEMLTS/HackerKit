@@ -7,6 +7,7 @@ import EncoderDecoder from './components/EncoderDecoder.vue';
 import About from './components/about.vue';
 import textCompare from './components/textCompare.vue';
 import Gzip from './components/gzip.vue';
+import Jwt from './components/jwt.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -40,6 +41,11 @@ const router = createRouter({
       path: '/gzip',
       name: 'GZIP',
       component: Gzip
+    },
+    {
+      path: '/jwt',
+      name: 'JWT',
+      component: Jwt
     },
     {
       path: '/system-info',

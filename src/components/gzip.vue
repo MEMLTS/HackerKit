@@ -221,14 +221,13 @@ const clearAll = () => {
 
                 <!-- 输入区域 -->
                 <div class="input-group">
-                    <label>{{ operationType === 'compress' ? '原始内容' : '压缩数据' }}</label>
                     <textarea v-model="inputText"
                         :placeholder="operationType === 'compress' ? '输入要压缩的内容...' : '输入要解压缩的数据...'"
                         rows="6"></textarea>
                 </div>
 
                 <!-- 操作按钮 -->
-                <div class="action-buttons">
+                <div class="button-group">
                     <button @click="processData" :disabled="isLoading" class="encode-btn">
                         {{ isLoading ? '处理中...' : operationType === 'compress' ? '压缩' : '解压缩' }}
                     </button>
@@ -242,9 +241,6 @@ const clearAll = () => {
 
                 <!-- 输出区域 -->
                 <div class="output-group">
-                    <div class="output-header">
-                        <label>结果:</label>
-                    </div>
                     <textarea v-model="outputText" placeholder="处理结果将显示在这里..." rows="6" readonly></textarea>
                 </div>
             </div>
