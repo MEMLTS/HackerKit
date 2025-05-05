@@ -343,27 +343,24 @@ const clearAll = () => {
                                 </option>
                             </select>
                         </div>
-
-                        <!-- 对称算法密钥设置 -->
-                        <div v-if="isSymmetricAlgorithm" class="setting-group">
-                            <label>对称密钥:</label>
-                            <input v-model="secretKey" placeholder="请输入密钥" />
-                        </div>
-
-                        <!-- 非对称算法密钥设置 -->
-                        <div v-if="!isSymmetricAlgorithm" class="key-settings">
-                            <div class="setting-group">
-                                <label>私钥 (PEM格式):</label>
-                                <textarea v-model="privateKey" placeholder="请输入私钥或点击生成按钮" rows="3"></textarea>
-                            </div>
-                            <div class="setting-group">
-                                <label>公钥 (PEM格式):</label>
-                                <textarea v-model="publicKey" placeholder="请输入公钥或点击生成按钮" rows="3"></textarea>
-                            </div>
-                            <button @click="generateKeyPair" class="generate-btn">生成密钥对</button>
-                        </div>
+                    </div>
+                    <!-- 对称算法密钥设置 -->
+                    <div v-if="isSymmetricAlgorithm" class="setting-group">
+                        <label>对称密钥</label>
+                        <input v-model="secretKey" placeholder="请输入密钥" />
                     </div>
 
+                    <!-- 非对称算法密钥设置 -->
+                    <div v-if="!isSymmetricAlgorithm" class="key-settings">
+                        <div class="setting-group">
+                            <label>私钥</label>
+                            <textarea v-model="privateKey" placeholder="请输入私钥或点击生成按钮" rows="3"></textarea>
+                        </div>
+                        <div class="setting-group">
+                            <label>公钥</label>
+                            <textarea v-model="publicKey" placeholder="请输入公钥或点击生成按钮" rows="3"></textarea>
+                        </div>
+                    </div>
                     <!-- 输入区域 -->
                     <div class="input-group">
                         <textarea v-model="inputText"
@@ -376,7 +373,7 @@ const clearAll = () => {
                         <button @click="processData" :disabled="isLoading" class="encode-btn">
                             {{ isLoading ? '处理中...' : operationType === 'encode' ? '加密' : operationType === 'decode' ?
                                 '解密'
-                            : '验证' }}
+                                : '验证' }}
                         </button>
                         <button @click="clearAll" class="clear-btn">
                             清空
@@ -384,6 +381,8 @@ const clearAll = () => {
                         <button @click="copyResult" class="copy-btn">
                             复制
                         </button>
+                        <button @click="generateKeyPair" class="generate-btn"
+                            v-if="!isSymmetricAlgorithm">生成密钥对</button>
                     </div>
 
                     <!-- JWT解析显示区域 -->
@@ -485,22 +484,6 @@ const clearAll = () => {
     font-family: monospace;
     font-size: 12px;
     resize: vertical;
-}
-
-.generate-btn {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    margin-top: 5px;
-    align-self: flex-start;
-}
-
-.generate-btn:hover {
-    background-color: #45a049;
 }
 
 .preview-content {

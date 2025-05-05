@@ -162,6 +162,11 @@ const clear = () => {
     outputText.value = '';
 };
 
+const swap = () => {
+    const temp = inputText.value;
+    inputText.value = outputText.value;
+    outputText.value = temp;
+};
 // 按钮弹窗
 const modal = ref<InstanceType<typeof CustomModal> | null>(null);
 const copyOutput = () => {
@@ -173,7 +178,7 @@ const copyOutput = () => {
         navigator.clipboard.writeText(outputText.value);
         showMessage('复制成功！', { type: 'success' });
     } catch (e) {
-        showMessage('复制失败，请手动复制', { type:'error' });
+        showMessage('复制失败，请手动复制', { type: 'error' });
     }
 };
 </script>
@@ -204,6 +209,7 @@ const copyOutput = () => {
                             <button class="decode-btn" @click="decode">解码</button>
                             <button class="clear-btn" @click="clear">清除</button>
                             <button class="copy-btn" @click="copyOutput">复制结果</button>
+                            <button class="encode-btn" @click="swap">↑ ↓</button>
                         </div>
                         <div class="output-group">
                             <textarea v-model="outputText" placeholder="输出..." rows="12" readonly></textarea>

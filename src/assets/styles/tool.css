@@ -84,7 +84,8 @@ textarea {
     margin-right: 0.5rem;
 }
 
-.encode-type-selector select, .hash-type-selector select {
+.encode-type-selector select,
+.hash-type-selector select {
     width: auto;
     min-width: 120px;
     padding: 0.5rem 2rem 0.5rem 0.75rem;
@@ -100,12 +101,14 @@ textarea {
     background-size: 1rem;
 }
 
-.encode-type-selector select:hover, .hash-type-selector select:hover {
+.encode-type-selector select:hover,
+.hash-type-selector select:hover {
     border-color: #0078d4;
     box-shadow: 0 2px 8px rgba(0, 120, 212, 0.2);
 }
 
-.encode-type-selector select:focus, .hash-type-selector select:focus {
+.encode-type-selector select:focus,
+.hash-type-selector select:focus {
     outline: none;
     border-color: #0078d4;
     box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.1);
@@ -178,21 +181,35 @@ button {
     transform: scale(1.02);
 }
 
+.generate-btn {
+    background: #0ef366;
+    color: white;
+    border-radius: 6px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+}
+
+.generate-btn:hover {
+    background: #0ef366;
+    transform: scale(1.02);
+}
 
 /* 允许滚动但不显示滚动条 */
 .all-outputs {
-  overflow-y: scroll;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE 和 Edge */
+    overflow-y: scroll;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE 和 Edge */
 }
 
 .all-outputs::-webkit-scrollbar {
-  display: none; /* Chrome, Safari 和 Opera */
+    display: none;
+    /* Chrome, Safari 和 Opera */
 }
 
 .all-outputs textarea {
-  resize: none;
-  width: 100%;
-  box-sizing: border-box;
+    resize: none;
+    width: 100%;
+    box-sizing: border-box;
 }
-
