@@ -24,103 +24,52 @@ const hashTypes = [
 // 输入和输出文本
 const inputText = ref('');
 const outputText = ref('');
-const allOutputs = ref<Record<string, string>>({});  // 存储所有算法的输出
 
-// 哈希计算函数
-const calculateMD5 = (text: string) => {
-    try {
-        return CryptoJS.MD5(text).toString();
-    } catch (e: any) {
-        return '计算失败：' + e.message;
-    }
-};
+// 文件信息
+const fileInfo = ref<{ name: string; size: string } | null>(null);
+const isFileMode = ref(false);
 
-const calculateSHA1 = (text: string) => {
-    try {
-        return CryptoJS.SHA1(text).toString();
-    } catch (e: any) {
-        return '计算失败：' + e.message;
-    }
-};
-
-const calculateSHA256 = (text: string) => {
-    try {
-        return CryptoJS.SHA256(text).toString();
-    } catch (e: any) {
-        return '计算失败：' + e.message;
-    }
-};
-
-const calculateSHA512 = (text: string) => {
-    try {
-        return CryptoJS.SHA512(text).toString();
-    } catch (e: any) {
-        return '计算失败：' + e.message;
-    }
-};
-
-const calculateSHA3 = (text: string) => {
-    try {
-        return CryptoJS.SHA3(text).toString();
-    } catch (e: any) {
-        return '计算失败：' + e.message;
-    }
-};
-
-const calculateRIPEMD160 = (text: string) => {
-    try {
-        return CryptoJS.RIPEMD160(text).toString();
-    } catch (e: any) {
-        return '计算失败：' + e.message;
-    }
-};
-
-const calculateSHA224 = (text: string) => {
-    try {
-        return CryptoJS.SHA224(text).toString();
-    } catch (e: any) {
-        return '计算失败：' + e.message;
-    }
-};
-
-const calculateSHA384 = (text: string) => {
-    try {
-        return CryptoJS.SHA384(text).toString();
-    } catch (e: any) {
-        return '计算失败：' + e.message;
-    }
-};
-
-// 哈希计算操作映射
+// 显式列出CryptoJS哈希方法
 const hashFunctions: Record<HashType, (text: string) => string> = {
-    md5: calculateMD5,
-    sha1: calculateSHA1,
-    sha256: calculateSHA256,
-    sha512: calculateSHA512,
-    sha3: calculateSHA3,
-    ripemd160: calculateRIPEMD160,
-    sha224: calculateSHA224,
-    sha384: calculateSHA384
+    md5: (text) => CryptoJS.MD5(text).toString(),
+    sha1: (text) => CryptoJS.SHA1(text).toString(),
+    sha256: (text) => CryptoJS.SHA256(text).toString(),
+    sha512: (text) => CryptoJS.SHA512(text).toString(),
+    sha3: (text) => CryptoJS.SHA3(text).toString(),
+    ripemd160: (text) => CryptoJS.RIPEMD160(text).toString(),
+    sha224: (text) => CryptoJS.SHA224(text).toString(),
+    sha384: (text) => CryptoJS.SHA384(text).toString()
 };
 
 // 计算触发器
 const calculate = () => {
-    outputText.value = hashFunctions[hashType.value](inputText.value);
-};
-
-// 计算所有哈希值
-const calculateAll = () => {
-    allOutputs.value = {};  // 重置所有输出
-    Object.keys(hashFunctions).forEach((key) => {
-        const result = hashFunctions[key as HashType](inputText.value);
-        allOutputs.value[key] = result;  // 保存每个哈希算法的计算结果
-    });
+    if (!inputText.value && !isFileMode.value) {
+        modal.value?.showModal('WARN', '输入不能为空');
+        return;
+    }
+    if (isFileMode.value && fileInfo.value) {
+        // 重新计算文件哈希
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const arrayBuffer = e.target?.result as ArrayBuffer;
+            const wordArray = CryptoJS.lib.WordArray.create(arrayBuffer);
+            outputText.value = hashFunctions[hashType.value](wordArray.toString());
+        };
+        // 重新读取文件内容
+        const fileInput = document.getElementById('file-input') as HTMLInputElement;
+        if (fileInput.files?.[0]) {
+            reader.readAsArrayBuffer(fileInput.files[0]);
+        }
+    } else {
+        outputText.value = hashFunctions[hashType.value](inputText.value);
+    }
 };
 
 const clear = () => {
     inputText.value = '';
     outputText.value = '';
-    allOutputs.value = {};  // 清除所有输出
+    fileInfo.value = null;
+    isFileMode.value = false;
 };
 
 // 按钮弹窗
@@ -136,6 +85,27 @@ const copyOutput = () => {
     } catch (e) {
         modal.value?.showModal('错误', '复制失败，请手动复制');
     }
+};
+
+// 文件处理
+const handleFileInput = (event: Event) => {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+
+    // 更新文件信息
+    fileInfo.value = {
+        name: file.name,
+        size: (file.size / 1024).toFixed(2) + ' KB'
+    };
+    isFileMode.value = true;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const arrayBuffer = e.target?.result as ArrayBuffer;
+        const wordArray = CryptoJS.lib.WordArray.create(arrayBuffer);
+        outputText.value = hashFunctions[hashType.value](wordArray.toString());
+    };
+    reader.readAsArrayBuffer(file);  // 直接读取为ArrayBuffer
 };
 </script>
 
@@ -156,25 +126,26 @@ const copyOutput = () => {
                         </select>
                     </div>
                     <div class="card-content">
-                        <div class="input-group">
+                        <div class="input-group" v-if="!isFileMode">
                             <br>
-                            <textarea v-model="inputText" placeholder="输入..." rows="5"></textarea>
+                            <textarea v-model="inputText" placeholder="输入文本..." rows="5"></textarea>
+                        </div>
+                        <div class="file-info" v-else>
+                            <div class="file-details">
+                                <p><strong>文件名：</strong>{{ fileInfo?.name }}</p>
+                                <p><strong>文件大小：</strong>{{ fileInfo?.size }}</p>
+                            </div>
                         </div>
                         <div class="button-group">
                             <button class="encode-btn" @click="calculate">计算</button>
-                            <button class="encode-btn" @click="calculateAll">全部计算</button>
                             <button class="clear-btn" @click="clear">清除</button>
-                            <button class="copy-btn" @click="copyOutput">复制结果</button>
+                            <button class="copy-btn" @click="copyOutput">复制</button>
+                            <label for="file-input" class="encode-btn">选择文件</label>
+                            <input id="file-input" type="file" @change="handleFileInput" accept="*.*"
+                                class="file-input">
                         </div>
                         <div class="output-group">
                             <textarea v-model="outputText" placeholder="输出..." rows="8" readonly></textarea>
-                        </div>
-                        <!-- 显示全部计算的结果 -->
-                        <div class="all-outputs">
-                            <div v-for="(result, key) in allOutputs" :key="key">
-                                <strong>{{ key }}:</strong>
-                                <textarea :value="result" rows="2" readonly></textarea>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -184,4 +155,30 @@ const copyOutput = () => {
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.file-input {
+    display: none;
+}
+
+.file-info {
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+}
+
+.file-details {
+    text-align: left;
+}
+
+.file-details p {
+    margin: 8px 0;
+    color: #666;
+}
+
+.file-details strong {
+    color: #333;
+    margin-right: 10px;
+}
+</style>
