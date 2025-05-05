@@ -24,10 +24,11 @@ jobs:
         with:
           toolchain: 1.86
 
-      - name: Set up Node.js
+      - name: ⚙️ 设置 Node.js 环境
         uses: actions/setup-node@v3
         with:
-          node-version: '22'
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: |
