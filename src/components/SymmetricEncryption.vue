@@ -279,7 +279,7 @@ const copyOutput = () => {
                                 </option>
                             </select>
                             <input v-model="key" placeholder="输入密钥" />
-                            <button @click="generateKey">生成密钥</button>
+                            <button @click="generateKey">生成</button>
                         </div>
 
                         <div class="setting-group" v-if="encryptionMode !== 'ecb'">
@@ -290,7 +290,7 @@ const copyOutput = () => {
                                 </option>
                             </select>
                             <input v-model="iv" placeholder="输入IV" />
-                            <button @click="generateIV">生成IV</button>
+                            <button @click="generateIV">生成</button>
                         </div>
                     </div>
 
