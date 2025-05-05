@@ -51,7 +51,7 @@ const getOneDayLaterTimestamp = () => getCurrentTimestamp() + 86400; // 一天�
 
 const defaultPayload = computed(() => {
     return {
-        username: 'toolhelper.cn',
+        username: 'memlts',
         sub: 'demo',
         iat: getCurrentTimestamp(),
         exp: getOneDayLaterTimestamp()
@@ -116,7 +116,7 @@ initializeDefaultValues();
 // JWT处理
 const processData = async () => {
     if (!inputText.value.trim()) {
-        showMessage('请输入要处理的内容', { type:'warning' });
+        showMessage('请输入要处理的内容', { type: 'warning' });
         return;
     }
 
@@ -153,14 +153,14 @@ const generateKeyPair = async () => {
             });
         } else if (algorithmType.value.startsWith('ES')) {
             // 生成EC密钥对
-            const curve = algorithmType.value === 'ES256' ? 'P-256' : 
-                          algorithmType.value === 'ES384' ? 'P-384' : 'P-521';
-            keyPair = await jose.generateKeyPair(algorithmType.value, { 
+            const curve = algorithmType.value === 'ES256' ? 'P-256' :
+                algorithmType.value === 'ES384' ? 'P-384' : 'P-521';
+            keyPair = await jose.generateKeyPair(algorithmType.value, {
                 crv: curve,
-                extractable: true 
+                extractable: true
             });
         } else {
-            showMessage('不支持的算法类型', { type:'warning' });
+            showMessage('不支持的算法类型', { type: 'warning' });
             throw new Error('不支持的算法类型');
         }
 
@@ -279,7 +279,7 @@ const verifyJWT = async (token: string): Promise<string> => {
 // 复制结果到剪贴板
 const copyResult = () => {
     if (!outputText.value) {
-        showMessage('没有内容可复制', { type:'warning' });
+        showMessage('没有内容可复制', { type: 'warning' });
         return;
     }
 
@@ -304,124 +304,126 @@ const clearAll = () => {
 </script>
 
 <template>
-  <div>
-    <div class="tool-container">
-        <div class="tool-header">
-            <h2>{{ title }}</h2>
-        </div>
+    <div>
+        <div class="tool-container">
+            <div class="tool-header">
+                <h2>{{ title }}</h2>
+            </div>
 
-        <div class="tool-content">
-            <div class="feature-card">
-                <!-- 操作类型选择 -->
-                <div class="operation-toggle">
-                    <button :class="{ active: operationType === 'encode' }"
-                        @click="operationType = 'encode'; clearAll()">
-                        JWT 加密
-                    </button>
-                    <button :class="{ active: operationType === 'decode' }"
-                        @click="operationType = 'decode'; clearAll()">
-                        JWT 解密
-                    </button>
-                    <button :class="{ active: operationType === 'verify' }"
-                        @click="operationType = 'verify'; clearAll()">
-                        JWT 校验
-                    </button>
-                </div>
-
-                <!-- 错误提示 -->
-                <div v-if="errorMessage" class="error-message">
-                    {{ errorMessage }}
-                </div>
-
-                <!-- 设置区域 -->
-                <div class="settings-group">
-                    <div class="setting-group">
-                        <label>签名算法:</label>
-                        <select v-model="algorithmType">
-                            <option v-for="option in algorithmOptions" :key="option.value" :value="option.value">
-                                {{ option.label }}
-                            </option>
-                        </select>
+            <div class="tool-content">
+                <div class="feature-card">
+                    <!-- 操作类型选择 -->
+                    <div class="operation-toggle">
+                        <button :class="{ active: operationType === 'encode' }"
+                            @click="operationType = 'encode'; clearAll()">
+                            JWT 加密
+                        </button>
+                        <button :class="{ active: operationType === 'decode' }"
+                            @click="operationType = 'decode'; clearAll()">
+                            JWT 解密
+                        </button>
+                        <button :class="{ active: operationType === 'verify' }"
+                            @click="operationType = 'verify'; clearAll()">
+                            JWT 校验
+                        </button>
                     </div>
 
-                    <!-- 对称算法密钥设置 -->
-                    <div v-if="isSymmetricAlgorithm" class="setting-group">
-                        <label>对称密钥:</label>
-                        <input v-model="secretKey" placeholder="请输入密钥" />
+                    <!-- 错误提示 -->
+                    <div v-if="errorMessage" class="error-message">
+                        {{ errorMessage }}
                     </div>
 
-                    <!-- 非对称算法密钥设置 -->
-                    <div v-if="!isSymmetricAlgorithm" class="key-settings">
+                    <!-- 设置区域 -->
+                    <div class="settings-group">
                         <div class="setting-group">
-                            <label>私钥 (PEM格式):</label>
-                            <textarea v-model="privateKey" placeholder="请输入私钥或点击生成按钮" rows="3"></textarea>
+                            <label>签名算法:</label>
+                            <select v-model="algorithmType">
+                                <option v-for="option in algorithmOptions" :key="option.value" :value="option.value">
+                                    {{ option.label }}
+                                </option>
+                            </select>
                         </div>
-                        <div class="setting-group">
-                            <label>公钥 (PEM格式):</label>
-                            <textarea v-model="publicKey" placeholder="请输入公钥或点击生成按钮" rows="3"></textarea>
+
+                        <!-- 对称算法密钥设置 -->
+                        <div v-if="isSymmetricAlgorithm" class="setting-group">
+                            <label>对称密钥:</label>
+                            <input v-model="secretKey" placeholder="请输入密钥" />
                         </div>
-                        <button @click="generateKeyPair" class="generate-btn">生成密钥对</button>
-                    </div>
-                </div>
 
-                <!-- 输入区域 -->
-                <div class="input-group">
-                    <textarea v-model="inputText"
-                        :placeholder="operationType === 'encode' ? '输入要加密的JSON...' : '输入要处理的JWT...'"
-                        rows="6"></textarea>
-                </div>
-
-                <!-- 操作按钮 -->
-                <div class="button-group">
-                    <button @click="processData" :disabled="isLoading" class="encode-btn">
-                        {{ isLoading ? '处理中...' : operationType === 'encode' ? '加密' : operationType === 'decode' ? '解密'
-                        : '验证' }}
-                    </button>
-                    <button @click="clearAll" class="clear-btn">
-                        清空
-                    </button>
-                    <button @click="copyResult" class="copy-btn">
-                        复制
-                    </button>
-                </div>
-
-                <!-- JWT解析显示区域 -->
-                <div v-if="operationType !== 'encode' && Object.keys(jwtHeader).length > 0" class="jwt-parsed-info">
-                    <div class="jwt-section">
-                        <h3>头部 (Header)</h3>
-                        <div class="jwt-content">
-                            <table>
-                                <tr v-for="(value, key) in jwtHeader" :key="key">
-                                    <td class="key">{{ key }}</td>
-                                    <td class="value">{{ value }}</td>
-                                </tr>
-                            </table>
+                        <!-- 非对称算法密钥设置 -->
+                        <div v-if="!isSymmetricAlgorithm" class="key-settings">
+                            <div class="setting-group">
+                                <label>私钥 (PEM格式):</label>
+                                <textarea v-model="privateKey" placeholder="请输入私钥或点击生成按钮" rows="3"></textarea>
+                            </div>
+                            <div class="setting-group">
+                                <label>公钥 (PEM格式):</label>
+                                <textarea v-model="publicKey" placeholder="请输入公钥或点击生成按钮" rows="3"></textarea>
+                            </div>
+                            <button @click="generateKeyPair" class="generate-btn">生成密钥对</button>
                         </div>
                     </div>
 
-                    <div class="jwt-section">
-                        <h3>载荷 (Payload)</h3>
-                        <div class="jwt-content">
-                            <table>
-                                <tr v-for="(value, key) in jwtPayload" :key="key">
-                                    <td class="key">{{ key }}</td>
-                                    <td class="value">
-                                        {{ key === 'iat' || key === 'exp' || key === 'nbf' ? new Date(value *
-                                        1000).toLocaleString() : value }}
-                                    </td>
-                                </tr>
-                            </table>
+                    <!-- 输入区域 -->
+                    <div class="input-group">
+                        <textarea v-model="inputText"
+                            :placeholder="operationType === 'encode' ? '输入要加密的JSON...' : '输入要处理的JWT...'"
+                            rows="6"></textarea>
+                    </div>
+
+                    <!-- 操作按钮 -->
+                    <div class="button-group">
+                        <button @click="processData" :disabled="isLoading" class="encode-btn">
+                            {{ isLoading ? '处理中...' : operationType === 'encode' ? '加密' : operationType === 'decode' ?
+                                '解密'
+                            : '验证' }}
+                        </button>
+                        <button @click="clearAll" class="clear-btn">
+                            清空
+                        </button>
+                        <button @click="copyResult" class="copy-btn">
+                            复制
+                        </button>
+                    </div>
+
+                    <!-- JWT解析显示区域 -->
+                    <div v-if="operationType !== 'encode' && Object.keys(jwtHeader).length > 0" class="jwt-parsed-info">
+                        <div class="jwt-section">
+                            <h3>头部 (Header)</h3>
+                            <div class="jwt-content">
+                                <table>
+                                    <tr v-for="(value, key) in jwtHeader" :key="key">
+                                        <td class="key">{{ key }}</td>
+                                        <td class="value">{{ value }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="jwt-section">
+                            <h3>载荷 (Payload)</h3>
+                            <div class="jwt-content">
+                                <table>
+                                    <tr v-for="(value, key) in jwtPayload" :key="key">
+                                        <td class="key">{{ key }}</td>
+                                        <td class="value">
+                                            {{ key === 'iat' || key === 'exp' || key === 'nbf' ? new Date(value *
+                                                1000).toLocaleString() : value }}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- 输出区域 -->
-                <div class="output-group" v-if="isencode">
-                    <textarea v-model="outputText" placeholder="处理结果将显示在这里..." rows="6" readonly></textarea>
+                    <!-- 输出区域 -->
+                    <div class="output-group" v-if="isencode">
+                        <textarea v-model="outputText" placeholder="处理结果将显示在这里..." rows="6" readonly></textarea>
+                    </div>
                 </div>
             </div>
         </div>
-    </div></div>
+    </div>
 </template>
 
 <style scoped>
@@ -500,6 +502,7 @@ const clearAll = () => {
 .generate-btn:hover {
     background-color: #45a049;
 }
+
 .preview-content {
     background-color: #f8f8f8;
     border: 1px solid #ddd;
