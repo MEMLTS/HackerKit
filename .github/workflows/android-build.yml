@@ -52,6 +52,7 @@ jobs:
       - name: 安装项目依赖
         run: |
           npm install
+          npm i -g pnpm
           cargo install tauri-cli
 
       - name: 添加 Rust Android 目标
