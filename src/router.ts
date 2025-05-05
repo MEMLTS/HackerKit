@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Hash from './components/hash.vue';
-import Tool2 from './components/Tool2.vue';
+import SymmetricEncryption from './components/SymmetricEncryption.vue';
 import Welcome from './components/Welcome.vue';
 import SystemInfo from './components/systemInfo.vue';
 import EncoderDecoder from './components/EncoderDecoder.vue';
@@ -20,9 +20,9 @@ const router = createRouter({
       component: Hash
     },
     {
-      path: '/tool2',
-      name: 'Tool2',
-      component: Tool2
+      path: '/symmetricEncryption',
+      name: 'SymmetricEncryption',
+      component: SymmetricEncryption
     },
     {
       path: '/encoder-decoder',

@@ -2,11 +2,12 @@
 import { ref } from 'vue';
 import CustomModal from './CustomModal.vue';
 import CryptoJS from 'crypto-js';
+import punycode from 'punycode';
 
 import '@assets/styles/tool.css';
 
 // 定义编码类型的联合类型
-type EncodeType = 'base64' | 'url' | 'hex' | 'unicode' | 'ascii';
+type EncodeType = 'base64' | 'url' | 'hex' | 'unicode' | 'ascii' | 'punycode';
 
 // 标题和当前选择的编码类型
 const title = ref('编码解码工具');
@@ -16,7 +17,8 @@ const encodeTypes = [
     { value: 'url', label: 'URL' },
     { value: 'hex', label: 'HEX' },
     { value: 'unicode', label: 'Unicode' },
-    { value: 'ascii', label: 'ASCII/Native' }
+    { value: 'ascii', label: 'ASCII/Native' },
+    { value: 'punycode', label: 'Punycode' }
 ];
 
 // 输入和输出文本
@@ -109,13 +111,32 @@ const decodeASCII = (text: string) => {
     }
 };
 
-// 编码解码操作映射
+//* 编码解码操作映射
+
+// 处理 Punycode 字符串
+const encodePunycode = (text: string) => {
+    try {
+        outputText.value = punycode.encode(text);
+    } catch (e: any) {
+        outputText.value = '编码失败：' + e.message;
+    }
+};
+
+const decodePunycode = (text: string) => {
+    try {
+        outputText.value = punycode.decode(text);
+    } catch (e) {
+        outputText.value = '解码失败：无效的Punycode字符串';
+    }
+};
+
 const encodeDecodeFunctions: Record<EncodeType, { encode: (text: string) => void; decode: (text: string) => void }> = {
     base64: { encode: encodeBase64, decode: decodeBase64 },
     url: { encode: encodeURL, decode: decodeURL },
     hex: { encode: encodeHex, decode: decodeHex },
     unicode: { encode: encodeUnicode, decode: decodeUnicode },
-    ascii: { encode: encodeASCII, decode: decodeASCII }
+    ascii: { encode: encodeASCII, decode: decodeASCII },
+    punycode: { encode: encodePunycode, decode: decodePunycode }
 };
 
 // 编码解码触发器

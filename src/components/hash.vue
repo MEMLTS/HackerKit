@@ -13,12 +13,12 @@ const hashType = ref<HashType>('md5');
 const hashTypes = [
     { value: 'md5', label: 'MD5' },
     { value: 'sha1', label: 'SHA1' },
-    { value: 'sha256', label: 'SHA256' },
-    { value: 'sha512', label: 'SHA512' },
     { value: 'sha3', label: 'SHA3' },
-    { value: 'ripemd160', label: 'RIPEMD160' },
     { value: 'sha224', label: 'SHA2-224' },
-    { value: 'sha384', label: 'SHA3-384' }
+    { value: 'sha256', label: 'SHA256' },
+    { value: 'sha384', label: 'SHA3-384' },
+    { value: 'sha512', label: 'SHA512' },
+    { value: 'ripemd160', label: 'RIPEMD160' },
 ];
 
 // 输入和输出文本
@@ -35,12 +35,12 @@ const isFileMode = ref(false);
 const hashFunctions: Record<HashType, (input: string | CryptoJS.lib.WordArray) => string> = {
     md5: (input) => CryptoJS.MD5(input).toString(),
     sha1: (input) => CryptoJS.SHA1(input).toString(),
-    sha256: (input) => CryptoJS.SHA256(input).toString(),
-    sha512: (input) => CryptoJS.SHA512(input).toString(),
     sha3: (input) => CryptoJS.SHA3(input).toString(),
-    ripemd160: (input) => CryptoJS.RIPEMD160(input).toString(),
     sha224: (input) => CryptoJS.SHA224(input).toString(),
-    sha384: (input) => CryptoJS.SHA384(input).toString()
+    sha256: (input) => CryptoJS.SHA256(input).toString(),
+    sha384: (input) => CryptoJS.SHA384(input).toString(),
+    sha512: (input) => CryptoJS.SHA512(input).toString(),
+    ripemd160: (input) => CryptoJS.RIPEMD160(input).toString(),
 };
 const calculateAll = () => {
     allOutputs.value = {};  // 重置所有输出

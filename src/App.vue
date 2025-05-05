@@ -77,7 +77,7 @@ const toolGroups = ref<ToolGroup[]>([
     isCollapsed: false,
     tools: [
       { name: 'Hash工具', icon: hashIcon, route: '/hash' },
-      { name: '加密解密', icon: EncryptionIcon, route: '/tool2' },
+      { name: '加密解密', icon: EncryptionIcon, route: '/symmetricEncryption' },
       { name: '编码解码', icon: code, route: '/encoder-decoder' },
     ]
   },
