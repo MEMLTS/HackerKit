@@ -170,13 +170,7 @@ const toggleGroup = (group: ToolGroup) => {
 .main-content {
   flex: 1;
   padding: 2rem;
-  overflow-y: scroll;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.main-content::-webkit-scrollbar {
-  display: none;
+  overflow-y: auto;
 }
 
 .fade-enter-active,
@@ -306,13 +300,7 @@ const toggleGroup = (group: ToolGroup) => {
 .main-content {
   flex: 1;
   padding: 2rem;
-  overflow-y: scroll;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.main-content::-webkit-scrollbar {
-  display: none;
+  overflow-y: auto;
 }
 
 .fade-enter-active,

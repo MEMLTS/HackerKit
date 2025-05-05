@@ -24,36 +24,47 @@ const hashTypes = [
 // 输入和输出文本
 const inputText = ref('');
 const outputText = ref('');
+const allOutputs = ref<Record<string, string>>({});
+const isAllMode = ref(false);
 
 // 文件信息
 const fileInfo = ref<{ name: string; size: string } | null>(null);
 const isFileMode = ref(false);
 
 // 显式列出CryptoJS哈希方法
-const hashFunctions: Record<HashType, (text: string) => string> = {
-    md5: (text) => CryptoJS.MD5(text).toString(),
-    sha1: (text) => CryptoJS.SHA1(text).toString(),
-    sha256: (text) => CryptoJS.SHA256(text).toString(),
-    sha512: (text) => CryptoJS.SHA512(text).toString(),
-    sha3: (text) => CryptoJS.SHA3(text).toString(),
-    ripemd160: (text) => CryptoJS.RIPEMD160(text).toString(),
-    sha224: (text) => CryptoJS.SHA224(text).toString(),
-    sha384: (text) => CryptoJS.SHA384(text).toString()
+const hashFunctions: Record<HashType, (input: string | CryptoJS.lib.WordArray) => string> = {
+    md5: (input) => CryptoJS.MD5(input).toString(),
+    sha1: (input) => CryptoJS.SHA1(input).toString(),
+    sha256: (input) => CryptoJS.SHA256(input).toString(),
+    sha512: (input) => CryptoJS.SHA512(input).toString(),
+    sha3: (input) => CryptoJS.SHA3(input).toString(),
+    ripemd160: (input) => CryptoJS.RIPEMD160(input).toString(),
+    sha224: (input) => CryptoJS.SHA224(input).toString(),
+    sha384: (input) => CryptoJS.SHA384(input).toString()
 };
-
+const calculateAll = () => {
+    allOutputs.value = {};  // 重置所有输出
+    isAllMode.value = true; // 切换到全部计算模式
+    Object.keys(hashFunctions).forEach((key) => {
+        const result = hashFunctions[key as HashType](inputText.value);
+        allOutputs.value[key] = result;  // 保存每个哈希算法的计算结果
+    });
+}
 // 计算触发器
 const calculate = () => {
     if (!inputText.value && !isFileMode.value) {
         modal.value?.showModal('WARN', '输入不能为空');
         return;
     }
+    allOutputs.value = {};
+    isAllMode.value = false
     if (isFileMode.value && fileInfo.value) {
         // 重新计算文件哈希
         const reader = new FileReader();
         reader.onload = (e) => {
             const arrayBuffer = e.target?.result as ArrayBuffer;
             const wordArray = CryptoJS.lib.WordArray.create(arrayBuffer);
-            outputText.value = hashFunctions[hashType.value](wordArray.toString());
+            outputText.value = hashFunctions[hashType.value](wordArray);
         };
         // 重新读取文件内容
         const fileInput = document.getElementById('file-input') as HTMLInputElement;
@@ -68,8 +79,10 @@ const calculate = () => {
 const clear = () => {
     inputText.value = '';
     outputText.value = '';
+    allOutputs.value = {};  // 清除所有输出
     fileInfo.value = null;
     isFileMode.value = false;
+    isAllMode.value = false; // 重置全部计算模式
 };
 
 // 按钮弹窗
@@ -103,7 +116,7 @@ const handleFileInput = (event: Event) => {
     reader.onload = (e) => {
         const arrayBuffer = e.target?.result as ArrayBuffer;
         const wordArray = CryptoJS.lib.WordArray.create(arrayBuffer);
-        outputText.value = hashFunctions[hashType.value](wordArray.toString());
+        outputText.value = hashFunctions[hashType.value](wordArray);
     };
     reader.readAsArrayBuffer(file);  // 直接读取为ArrayBuffer
 };
@@ -138,14 +151,22 @@ const handleFileInput = (event: Event) => {
                         </div>
                         <div class="button-group">
                             <button class="encode-btn" @click="calculate">计算</button>
+                            <button class="decode-btn" @click="calculateAll">全部计算</button>
                             <button class="clear-btn" @click="clear">清除</button>
                             <button class="copy-btn" @click="copyOutput">复制</button>
                             <label for="file-input" class="encode-btn">选择文件</label>
                             <input id="file-input" type="file" @change="handleFileInput" accept="*.*"
                                 class="file-input">
                         </div>
-                        <div class="output-group">
+                        <div class="output-group" v-if="!isAllMode">
                             <textarea v-model="outputText" placeholder="输出..." rows="8" readonly></textarea>
+                        </div>
+                        <!-- 显示全部计算的结果 -->
+                        <div class="all-outputs" v-if="isAllMode || Object.keys(allOutputs).length > 0">
+                            <div v-for="(result, key) in allOutputs" :key="key">
+                                <strong>{{ key }}</strong>
+                                <textarea :value="result" rows="2" readonly></textarea>
+                            </div>
                         </div>
                     </div>
                 </div>

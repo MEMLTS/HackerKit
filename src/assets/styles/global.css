@@ -9,6 +9,16 @@
   --font-family: 'AlimamaFangYuanTiVF-Thin', sans-serif;
 }
 
+/* 隐藏滚动条但保持滚动功能 */
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+*::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
 body {
   font-family: var(--font-family);
 }
@@ -26,11 +36,13 @@ body {
 .app-container {
   display: flex;
   min-height: 100vh;
+  height: 100vh;
   background: var(--bg-color);
   color: var(--text-color);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   transition: background-color 0.2s ease, color 0.2s ease;
+  overflow: hidden;
 }
 
 .dark-mode-transition {
@@ -57,6 +69,7 @@ body {
   transition: width 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
   overflow-x: hidden;
 }
 
@@ -228,6 +241,7 @@ body {
   flex: 1;
   padding: 2rem;
   overflow-y: auto;
+  height: 100vh;
 }
 
 .fade-enter-active,
