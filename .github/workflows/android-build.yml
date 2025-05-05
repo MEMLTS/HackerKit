@@ -10,12 +10,34 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    environment: production  # 按需配置环境
 
     steps:
       - name: 🧾 检出代码
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      # 设置 Java 17（Android SDK 要求）
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # 设置 Android 环境（官方推荐方式）
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+
+      - name: 安装 Android 平台工具
+        run: |
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "platform-tools" "build-tools;34.0.0"
+
+      # 设置 NDK（直接指定版本）
+      - name: 安装 Android NDK
+        run: |
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "ndk;25.2.9519653"
+          echo "NDK_HOME=$ANDROID_HOME/ndk/25.2.9519653" >> $GITHUB_ENV
 
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
@@ -23,43 +45,47 @@ jobs:
           toolchain: 1.86
 
       - name: ⚙️ 设置 Node.js 环境
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'npm'
 
-      - name: Cache Node.js modules
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.npm
-            node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Install dependencies
+      - name: 安装项目依赖
         run: |
           npm install
           cargo install tauri-cli
 
-      - name: Set up Java JDK 11
-        uses: actions/setup-java@v3
-        with:
-          java-version: '11'
-          distribution: 'temurin'
-
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v2
-        with:
-          sdk-version: 30
-          ndk-version: 25.2.9519653
-
-      - name: Install Android Tools
-        run: |
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platform-tools" "build-tools;34.0.0" "platforms;android-30"
-
-      - name: Add Android targets to Rust
+      - name: 添加 Rust Android 目标
         run: |
           rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
 
+      # 构建 Android APK
+      - name: 构建 APK
+        run: |
+          cargo tauri android build --apk
+        env:
+          ANDROID_HOME: ${{ env.ANDROID_HOME }}
+          NDK_HOME: ${{ env.NDK_HOME }}
+          JAVA_HOME: ${{ env.JAVA_HOME }}
+
+      # 上传 APK 产物
+      - name: 上传 APK 产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: |
+            src-tauri/target/**/*.apk
+          retention-days: 7
+
+      # 可选：发布到 GitHub Release
+      - name: 创建 GitHub Release
+        uses: softprops/action-gh-release@v1
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            src-tauri/target/**/*.apk
+          draft: true
+          prerelease: false
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
