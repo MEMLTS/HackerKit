@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import CustomModal from './CustomModal.vue';
+import CustomModal from '../view/CustomModal.vue';
 import CryptoJS from 'crypto-js';
 import '@assets/styles/tool.css';
+import showMessage from '../utils/MessageService';
 
 // 定义加密类型和模式的类型
 type EncryptionType = 'aes' | 'des' | '3des';
@@ -230,11 +231,12 @@ const copyOutput = () => {
             return;
         }
         navigator.clipboard.writeText(outputText.value);
-        modal.value?.showModal('提示', '复制成功！');
+        showMessage('复制成功', { type: 'success' });
     } catch (e) {
-        modal.value?.showModal('错误', '复制失败，请手动复制');
+        showMessage('复制失败!', { type: 'error' });
     }
 };
+
 </script>
 
 <template>

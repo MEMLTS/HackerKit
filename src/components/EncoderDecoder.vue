@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import CustomModal from './CustomModal.vue';
+import CustomModal from '../view/CustomModal.vue';
 import CryptoJS from 'crypto-js';
 import punycode from 'punycode';
+import showMessage from '../utils/MessageService';
 
 import '@assets/styles/tool.css';
 
@@ -141,10 +142,18 @@ const encodeDecodeFunctions: Record<EncodeType, { encode: (text: string) => void
 
 // 编码解码触发器
 const encode = () => {
+    if (!inputText.value) {
+        modal.value?.showModal('WARN', '输入不能为空');
+        return;
+    }
     encodeDecodeFunctions[encodeType.value]?.encode(inputText.value);
 };
 
 const decode = () => {
+    if (!inputText.value) {
+        modal.value?.showModal('WARN', '输入不能为空');
+        return;
+    }
     encodeDecodeFunctions[encodeType.value]?.decode(inputText.value);
 };
 
@@ -162,9 +171,9 @@ const copyOutput = () => {
             return;
         }
         navigator.clipboard.writeText(outputText.value);
-        modal.value?.showModal('提示', '复制成功！');
+        showMessage('复制成功！', { type: 'success' });
     } catch (e) {
-        modal.value?.showModal('错误', '复制失败，请手动复制');
+        showMessage('复制失败，请手动复制', { type:'error' });
     }
 };
 </script>
@@ -172,45 +181,39 @@ const copyOutput = () => {
 <template>
     <div>
         <div class="tool-container">
-        <div class="tool-header">
-            <h2>{{ title }}</h2>
-        </div>
-        <!-- <div class="feature-card">
-        <div class="card-content">
-          <p>这里是编码解码工具主要功能区域</p>
-        </div>
-    </div> -->
-        <div class="tool-content">
-            <div class="feature-card">
-                <div class="encode-type-selector">
-                    <label>编码类型：</label>
-                    <select v-model="encodeType">
-                        <option v-for="type in encodeTypes" :key="type.value" :value="type.value">
-                            {{ type.label }}
-                        </option>
-                    </select>
-                </div>
-                <h3>编码解码功能</h3>
-                <div class="card-content">
-                    <div class="input-group">
-                        <textarea v-model="inputText" placeholder="输入..." rows="3"></textarea>
+            <div class="tool-header">
+                <h2>{{ title }}</h2>
+            </div>
+            <div class="tool-content">
+                <div class="feature-card">
+                    <div class="encode-type-selector">
+                        <label>编码类型：</label>
+                        <select v-model="encodeType">
+                            <option v-for="type in encodeTypes" :key="type.value" :value="type.value">
+                                {{ type.label }}
+                            </option>
+                        </select>
                     </div>
-                    <div class="button-group">
-                        <button class="encode-btn" @click="encode">编码</button>
-                        <button class="decode-btn" @click="decode">解码</button>
-                        <button class="clear-btn" @click="clear">清除</button>
-                        <button class="copy-btn" @click="copyOutput">复制结果</button>
-                    </div>
-                    <div class="output-group">
-                        <textarea v-model="outputText" placeholder="输出..." rows="6" readonly></textarea>
+                    <h3>编码解码功能</h3>
+                    <div class="card-content">
+                        <div class="input-group">
+                            <textarea v-model="inputText" placeholder="输入..." rows="3"></textarea>
+                        </div>
+                        <div class="button-group">
+                            <button class="encode-btn" @click="encode">编码</button>
+                            <button class="decode-btn" @click="decode">解码</button>
+                            <button class="clear-btn" @click="clear">清除</button>
+                            <button class="copy-btn" @click="copyOutput">复制结果</button>
+                        </div>
+                        <div class="output-group">
+                            <textarea v-model="outputText" placeholder="输出..." rows="12" readonly></textarea>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         </div>
         <CustomModal ref="modal" />
     </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

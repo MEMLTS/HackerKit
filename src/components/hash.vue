@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import CustomModal from './CustomModal.vue';
+import CustomModal from '../view/CustomModal.vue';
 import CryptoJS from 'crypto-js';
 import '@assets/styles/tool.css';
+import showMessage from '../utils/MessageService';
 
 // 定义哈希算法类型
 type HashType = 'md5' | 'sha1' | 'sha256' | 'sha512' | 'sha3' | 'ripemd160' | 'sha224' | 'sha384';
@@ -43,6 +44,10 @@ const hashFunctions: Record<HashType, (input: string | CryptoJS.lib.WordArray) =
     ripemd160: (input) => CryptoJS.RIPEMD160(input).toString(),
 };
 const calculateAll = () => {
+    if (!inputText.value && !outputText.value) {
+        modal.value?.showModal('WARN', '输入不能为空');
+        return;
+    }
     allOutputs.value = {};  // 重置所有输出
     isAllMode.value = true; // 切换到全部计算模式
     Object.keys(hashFunctions).forEach((key) => {
@@ -94,9 +99,9 @@ const copyOutput = () => {
             return;
         }
         navigator.clipboard.writeText(outputText.value);
-        modal.value?.showModal('提示', '复制成功！');
+        showMessage('复制成功', { type: 'success' });
     } catch (e) {
-        modal.value?.showModal('错误', '复制失败，请手动复制');
+        showMessage('复制失败，请手动复制', { type:'error' });
     }
 };
 
@@ -159,7 +164,7 @@ const handleFileInput = (event: Event) => {
                                 class="file-input">
                         </div>
                         <div class="output-group" v-if="!isAllMode">
-                            <textarea v-model="outputText" placeholder="输出..." rows="8" readonly></textarea>
+                            <textarea v-model="outputText" placeholder="输出..." rows="9" readonly></textarea>
                         </div>
                         <!-- 显示全部计算的结果 -->
                         <div class="all-outputs" v-if="isAllMode || Object.keys(allOutputs).length > 0">

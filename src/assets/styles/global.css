@@ -39,8 +39,8 @@ body {
   height: 100vh;
   background: var(--bg-color);
   color: var(--text-color);
-  backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
   transition: background-color 0.2s ease, color 0.2s ease;
   overflow: hidden;
 }
