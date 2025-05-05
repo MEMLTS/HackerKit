@@ -45,10 +45,9 @@ jobs:
           toolchain: 1.86
 
       - name: ⚙️ 设置 Node.js 环境
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
           node-version: 20
-          cache: 'npm'
 
       - name: 安装项目依赖
         run: |
