@@ -18,6 +18,8 @@ import EncryptionIcon from './assets/icons/encryption.svg';
 import txtIcon from './assets/icons/txt.svg';
 import gzipIcon from './assets/icons/mm-gzip.svg';
 import jwtIcon from './assets/icons/jwt.svg';
+import networkIcon from './assets/icons/network.svg';
+import whoisIcon from './assets/icons/whois.svg';
 
 const router = useRouter();
 const isSidebarCollapsed = ref(false);
@@ -77,21 +79,29 @@ const toolGroups = ref<ToolGroup[]>([
   {
     name: '常用工具',
     icon: wrenchIcon,
-    isCollapsed: false,
+    isCollapsed: true,
     tools: [
       { name: 'Hash工具', icon: hashIcon, route: '/hash' },
       { name: '加密解密', icon: EncryptionIcon, route: '/symmetricEncryption' },
       { name: '编码解码', icon: code, route: '/encoder-decoder' },
       { name: '文本对比', icon: txtIcon, route: '/text-compare' },
       { name: 'Gzip工具', icon: gzipIcon, route: '/gzip' },
-      { name: 'JWT解析器', icon: jwtIcon, route: '/jwt' },
-      //{ name: '时间戳', icon: toolsIcon, route: '/timestamp' }
+      { name: 'JWT解析', icon: jwtIcon, route: '/jwt' },
+      //{ name: '时间工具', icon: toolsIcon, route: '/timestamp' }
+    ]
+  },
+  {
+    name: '网络工具',
+    icon: networkIcon,
+    isCollapsed: true,
+    tools: [
+      { name: 'Whois', icon: whoisIcon, route: '/whois' }
     ]
   },
   {
     name: '系统工具',
     icon: systemIcon,
-    isCollapsed: false,
+    isCollapsed: true,
     tools: [
       { name: '工具1', icon: toolsIcon, route: '/hash' }
     ]
@@ -99,7 +109,7 @@ const toolGroups = ref<ToolGroup[]>([
   {
     name: '更多',
     icon: moreIcon,
-    isCollapsed: false,
+    isCollapsed: true,
     tools: [
       { name: '系统信息', icon: systemInfoIcon, route: '/system-info' },
       { name: '关于', icon: aboutIcon, route: '/about' },

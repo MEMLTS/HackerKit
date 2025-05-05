@@ -1,5 +1,6 @@
 use serde::Serialize;
 use sysinfo::{CpuExt, System, SystemExt};
+mod whois;
 
 #[derive(Serialize)]
 struct SystemInfo {
@@ -64,7 +65,10 @@ fn get_system_info() -> Result<String, String> {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![get_system_info])
+        .invoke_handler(tauri::generate_handler![
+            get_system_info,
+            whois::query_whois
+            ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

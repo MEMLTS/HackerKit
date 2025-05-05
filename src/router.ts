@@ -8,6 +8,7 @@ import About from './components/about.vue';
 import textCompare from './components/textCompare.vue';
 import Gzip from './components/gzip.vue';
 import Jwt from './components/jwt.vue';
+import Whois from './components/whois.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -46,6 +47,11 @@ const router = createRouter({
       path: '/jwt',
       name: 'JWT',
       component: Jwt
+    },
+    {
+      path: '/whois',
+      name: 'Whois',
+      component: Whois
     },
     {
       path: '/system-info',
