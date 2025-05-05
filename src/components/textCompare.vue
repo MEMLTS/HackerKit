@@ -182,6 +182,7 @@ const diffTypes = [
             <div class="feature-card">
                 <div class="options-bar">
                     <div class="diff-options">
+                        <div class="setting-group"></div>
                         <label>模式</label>
                         <select class="unified-select">
                             <option v-for="type in diffTypes" :key="type.value" :value="type.value">
@@ -189,7 +190,6 @@ const diffTypes = [
                             </option>
                         </select>
 
-                        <div class="settings-group">
                             <label>
                                 <input type="checkbox" v-model="showLineNumbers">
                                 显示行号
@@ -204,7 +204,6 @@ const diffTypes = [
                             </label>
                         </div>
                     </div>
-
                 </div>
 
                 <div class="compare-container">
@@ -254,7 +253,6 @@ const diffTypes = [
                 </div>
             </div>
         </div>
-    </div>
 </template>
 
 <style scoped>

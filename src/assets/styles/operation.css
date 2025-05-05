@@ -1,17 +1,34 @@
 
+:root {
+  --bg-color: #ffffff;
+  --text-color: #333333;
+  --border-color: #e0e0e0;
+  --button-bg: #f5f5f5;
+  --active-color: #3a86ff;
+}
+
+.dark {
+  --bg-color: #1a1a1a;
+  --text-color: #e0e0e0;
+  --border-color: #333333;
+  --button-bg: #2d2d2d;
+  --active-color: #3a86ff;
+}
+
 .operation-toggle {
     display: flex;
     margin-bottom: 20px;
     border-radius: 8px;
     overflow: hidden;
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--border-color);
 }
 
 .operation-toggle button {
     flex: 1;
     padding: 10px;
     border: none;
-    background: #f5f5f5;
+    background: var(--button-bg);
+    color: var(--text-color);
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -35,15 +52,16 @@
     display: block;
     margin-bottom: 6px;
     font-weight: 500;
-    color: #555;
+    color: var(--text-color);
 }
 
 .setting select {
     width: 100%;
     padding: 8px 12px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     border-radius: 6px;
-    background: white;
+    background: var(--bg-color);
+    color: var(--text-color);
 }
 
 .input-group label,
@@ -53,7 +71,7 @@
     align-items: center;
     margin-bottom: 6px;
     font-weight: 500;
-    color: #555;
+    color: var(--text-color);
 }
 
 textarea:focus {

@@ -135,7 +135,7 @@ const handleFileInput = (event: Event) => {
             </div>
             <div class="tool-content">
                 <div class="feature-card">
-                    <div class="hash-type-selector">
+                    <div class="setting-group">
                         <label>哈希算法：</label>
                         <select v-model="hashType">
                             <option v-for="type in hashTypes" :key="type.value" :value="type.value">

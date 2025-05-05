@@ -200,7 +200,7 @@ const clearAll = () => {
 
                 <!-- 设置区域 -->
                 <div class="settings-group">
-                    <div class="setting">
+                    <div class="setting-group">
                         <label>算法:</label>
                         <select v-model="compressionType">
                             <option v-for="algo in compressionAlgorithms" :key="algo.value" :value="algo.value">
@@ -209,7 +209,7 @@ const clearAll = () => {
                         </select>
                     </div>
 
-                    <div class="setting">
+                    <div class="setting-group">
                         <label>编码:</label>
                         <select v-model="encodingType">
                             <option v-for="format in encodingFormats" :key="format.value" :value="format.value">
@@ -236,8 +236,8 @@ const clearAll = () => {
                         清空
                     </button>
                     <button @click="copyResult" class="copy-btn">
-                            复制
-                        </button>
+                        复制
+                    </button>
                 </div>
 
                 <!-- 输出区域 -->

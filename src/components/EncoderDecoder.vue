@@ -186,7 +186,7 @@ const copyOutput = () => {
             </div>
             <div class="tool-content">
                 <div class="feature-card">
-                    <div class="encode-type-selector">
+                    <div class="setting-group">
                         <label>编码类型：</label>
                         <select v-model="encodeType">
                             <option v-for="type in encodeTypes" :key="type.value" :value="type.value">
