@@ -1,13 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import '@assets/styles/tool.css';
-import { invoke } from '@tauri-apps/api/core';
 
 const title = ref('关于');
 
-async function openDevTools() {
-  await invoke('open_devtools');
-}
 </script>
 
 <template>
@@ -21,7 +17,6 @@ async function openDevTools() {
         <h3>???</h3>
         <div class="card-content">
           <p>没写没写</p>
-          <button @click="openDevTools">打开开发者工具</button>
         </div>
       </div>
     </div>
