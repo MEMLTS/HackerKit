@@ -1,6 +1,25 @@
 use serde::Serialize;
 use sysinfo::{CpuExt, System, SystemExt};
+use tauri::Manager;
 mod whois;
+
+#[tauri::command]
+fn open_devtools() {
+    tauri::Builder::default()
+        .setup(|app| {
+            {
+                // 获取 Webview 窗口对象 主窗口ID:"main"
+                let window = app.get_webview_window("main").unwrap();
+                // 打开 DevTools
+                window.open_devtools();
+                // 关闭 DevTools
+                // window.close_devtools();
+            }
+            Ok(())
+        })
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
+}
 
 #[derive(Serialize)]
 struct SystemInfo {
@@ -67,8 +86,9 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             get_system_info,
-            whois::query_whois
-            ])
+            whois::query_whois,
+            open_devtools
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
