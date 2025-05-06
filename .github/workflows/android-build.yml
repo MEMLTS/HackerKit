@@ -59,14 +59,23 @@ jobs:
         run: |
           rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
 
-      # 构建 Android APK
+      - name: 配置 OpenSSL 环境
+        run: |
+          echo "NDK_HOME=$ANDROID_HOME/ndk/25.2.9519653" >> $GITHUB_ENV
+          echo "OPENSSL_DIR=$NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr" >> $GITHUB_ENV
+
       - name: 构建 APK
         run: |
-          cargo tauri android build --apk
+          export CC_aarch64_linux_android="$NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android33-clang"
+          export AR_aarch64_linux_android="$NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar"
+          
+          # 强制使用 vendored OpenSSL
+          export OPENSSL_STATIC=1
+          export OPENSSL_NO_VENDOR=0
+          
+          cargo tauri android build --apk -vv
         env:
-          ANDROID_HOME: ${{ env.ANDROID_HOME }}
-          NDK_HOME: ${{ env.NDK_HOME }}
-          JAVA_HOME: ${{ env.JAVA_HOME }}
+          RUSTFLAGS: "-C linker=$NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android33-clang"
 
       # 上传 APK 产物
       - name: 上传 APK 产物
