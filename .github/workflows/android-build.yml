@@ -5,35 +5,31 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: production  # 按需配置环境
+    environment: production
 
     steps:
       - name: 🧾 检出代码
         uses: actions/checkout@v4
 
-      # 设置 Java 17（Android SDK 要求）
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - name: setup jdk
+        uses: actions/setup-java@v1
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          java-version: 11
 
-      # 设置 Android 环境（官方推荐方式）
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
 
       - name: 安装 Android 平台工具
         run: |
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "platform-tools" "build-tools;34.0.0"
 
-      # 设置 NDK（直接指定版本）
       - name: 安装 Android NDK
         run: |
           $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "ndk;25.2.9519653"
@@ -55,29 +51,10 @@ jobs:
           npm i -g pnpm
           cargo install tauri-cli
 
-      - name: 添加 Rust Android 目标
+      - name: 编译 Android
         run: |
-          rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
+          npm run tauri android build -- --apk
 
-      - name: 配置 OpenSSL 环境
-        run: |
-          echo "NDK_HOME=$ANDROID_HOME/ndk/25.2.9519653" >> $GITHUB_ENV
-          echo "OPENSSL_DIR=$NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr" >> $GITHUB_ENV
-
-      - name: 构建 APK
-        run: |
-          export CC_aarch64_linux_android="$NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android33-clang"
-          export AR_aarch64_linux_android="$NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar"
-          
-          # 强制使用 vendored OpenSSL
-          export OPENSSL_STATIC=1
-          export OPENSSL_NO_VENDOR=0
-          
-          cargo tauri android build --apk -vv
-        env:
-          RUSTFLAGS: "-C linker=$NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android33-clang"
-
-      # 上传 APK 产物
       - name: 上传 APK 产物
         uses: actions/upload-artifact@v4
         with:
@@ -86,15 +63,6 @@ jobs:
             src-tauri/target/**/*.apk
           retention-days: 7
 
-      # 可选：发布到 GitHub Release
-      - name: 创建 GitHub Release
-        uses: softprops/action-gh-release@v1
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
-        with:
-          files: |
-            src-tauri/target/**/*.apk
-          draft: true
-          prerelease: false
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
