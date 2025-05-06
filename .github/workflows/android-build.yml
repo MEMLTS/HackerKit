@@ -12,19 +12,15 @@ jobs:
     environment: production
 
     steps:
-      - name: 🧾 检出代码
-        uses: actions/checkout@v4
-
-      - name: setup jdk
-        uses: actions/setup-java@v1
+      - name: Checkout
+        uses: actions/checkout@v2.4.0
+      - name: Setup JDK
+        uses: actions/setup-java@v2.5.0
         with:
-          java-version: 11
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
-
-      - name: Make Gradle executable
-        run: chmod +x ./gradlew
+          distribution: temurin
+          java-version: "11"
+      - name: Set execution flag for gradlew
+        run: chmod +x gradlew
 
       - name: 安装 Android 平台工具
         run: |
