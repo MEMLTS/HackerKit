@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import JsonTextarea from '../view/JsonTextarea.vue';
 import '@assets/styles/tool.css';
 import { invoke } from '@tauri-apps/api/core';
 import showMessage from '../utils/MessageService';
@@ -85,7 +86,7 @@ const clear = () => {
                 <!-- 查询结果 -->
                 <div v-if="parsedData" class="result-container">
                     <div v-if="showRaw === 'raw'" class="raw-data">
-                        <pre>{{ rawData }}</pre>
+                        <JsonTextarea :modelValue="rawData" readonly />
                     </div>
 
                     <div v-else class="parsed-data">
