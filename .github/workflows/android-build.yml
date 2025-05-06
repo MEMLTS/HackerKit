@@ -1,64 +1,63 @@
-name: Build Tauri Android App
+name: Android CI
 
 on:
-  workflow_dispatch:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-    environment: production
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2.4.0
-      - name: Setup JDK
-        uses: actions/setup-java@v2.5.0
-        with:
-          distribution: temurin
-          java-version: "11"
-      - name: Set execution flag for gradlew
-        run: chmod +x gradlew
+    - uses: actions/checkout@v4
+    - name: set up JDK 11
+      uses: actions/setup-java@v4
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: gradle
 
-      - name: 安装 Android 平台工具
-        run: |
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "platform-tools" "build-tools;34.0.0"
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
 
-      - name: 安装 Android NDK
-        run: |
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "ndk;25.2.9519653"
-          echo "NDK_HOME=$ANDROID_HOME/ndk/25.2.9519653" >> $GITHUB_ENV
+    - name: 安装 Android 平台工具
+      run: |
+        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "platform-tools" "build-tools;34.0.0"
 
-      - name: Set up Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: 1.86
+    - name: 安装 Android NDK
+      run: |
+        $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "ndk;25.2.9519653"
+        echo "NDK_HOME=$ANDROID_HOME/ndk/25.2.9519653" >> $GITHUB_ENV
 
-      - name: ⚙️ 设置 Node.js 环境
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
+    - name: Set up Rust
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        toolchain: 1.86
 
-      - name: 安装项目依赖
-        run: |
-          npm install
-          npm i -g pnpm
-          cargo install tauri-cli
+    - name: ⚙️ 设置 Node.js 环境
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20
 
-      - name: 编译 Android
-        run: |
-          npm run tauri android build -- --apk
+    - name: 安装项目依赖
+      run: |
+        npm install
+        npm i -g pnpm
+        cargo install tauri-cli
 
-      - name: 上传 APK 产物
-        uses: actions/upload-artifact@v4
-        with:
-          name: android-apk
-          path: |
-            src-tauri/target/**/*.apk
-          retention-days: 7
+    - name: 编译 Android
+      run: |
+        npm run tauri android build -- --apk
 
-      - uses: tauri-apps/tauri-action@v0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: 上传 APK 产物
+      uses: actions/upload-artifact@v4
+      with:
+        name: android-apk
+        path: |
+          src-tauri/target/**/*.apk
+        retention-days: 7
+
+    - uses: tauri-apps/tauri-action@v0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
