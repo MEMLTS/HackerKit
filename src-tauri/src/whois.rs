@@ -6,24 +6,20 @@ use tauri::command;
 pub async fn query_whois(domain_name: String) -> Result<Value, String> {
     let client = Client::new();
 
-    let url = format!(
-        "https://whois.aliyun.com/whois/api_whois_info?domainName={}",
-        domain_name
-    );
+    let url = "https://api.uutool.cn/whois/info/";
 
-    // 设置请求头部，添加 Accept-Language
+    // 设置请求头
     let mut headers = header::HeaderMap::new();
     headers.insert("Accept-Language", header::HeaderValue::from_static("zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6"));
 
-    // 发送请求获取 WHOIS 信息
-    match client.get(&url).headers(headers).send().await {
+    // 请求体
+    let body = [("domain", domain_name)];
+
+    match client.post(url).headers(headers).form(&body).send().await {
         Ok(response) => {
-            // 检查响应状态
             if response.status().is_success() {
-                // 尝试解析 JSON 响应
                 match response.json::<Value>().await {
                     Ok(json_response) => {
-                        // 直接将 JSON 响应返回给前端
                         Ok(json_response)
                     }
                     Err(e) => Err(format!("解析 JSON 响应失败: {}", e)),
