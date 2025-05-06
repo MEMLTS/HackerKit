@@ -169,7 +169,7 @@ const clear = () => {
 
 .tabs {
     display: flex;
-    border-bottom: 2px solid #ddd;
+    border-bottom: 2px solid #4ffa0b;
     margin-bottom: 15px;
 }
 
@@ -177,7 +177,7 @@ const clear = () => {
     padding: 10px;
     cursor: pointer;
     font-weight: 600;
-    color: #555;
+    color: #afb6b1;
     transition: all 0.3s;
 }
 
@@ -207,10 +207,5 @@ const clear = () => {
 .parsed-data td {
     padding: 6px 10px;
     border: 1px solid #eee;
-}
-
-.parsed-data td strong {
-    font-weight: bold;
-    color: #333;
 }
 </style>
