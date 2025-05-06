@@ -407,9 +407,8 @@ const copyOutput = () => {
 <template>
   <div class="tool-container">
     <div class="tool-header">
-      <h2>{{ title }}</h2>
+      <h2>{{ title }} 该页面未完工,等待Admilk......</h2>
     </div>
-
     <div class="tool-content">
       <div class="feature-card">
         <!-- 操作类型选择 -->
