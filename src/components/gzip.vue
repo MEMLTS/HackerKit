@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import showMessage from '../utils/MessageService';
 
 // 页面标题
 const title = ref('压缩/解压缩工具');
@@ -33,8 +34,7 @@ const isLoading = ref(false);
 // 压缩/解压缩处理
 const processData = async () => {
     if (!inputText.value.trim()) {
-        errorMessage.value = '请输入要处理的内容';
-        setTimeout(() => errorMessage.value = '', 3000);
+        showMessage('请输入要处理的内容', { type: 'warning' })
         return;
     }
 
@@ -49,8 +49,7 @@ const processData = async () => {
         }
     } catch (error) {
         console.error('处理失败:', error);
-        errorMessage.value = `处理失败: ${error instanceof Error ? error.message : String(error)}`;
-        setTimeout(() => errorMessage.value = '', 5000);
+        showMessage('处理失败', { type: 'error' });
     } finally {
         isLoading.value = false;
     }
@@ -150,16 +149,13 @@ const hexToBuffer = (hex: string): Uint8Array => {
 // 复制结果到剪贴板
 const copyResult = () => {
     if (!outputText.value) {
-        errorMessage.value = '没有内容可复制';
-        setTimeout(() => errorMessage.value = '', 3000);
+        showMessage('没有内容可复制', { type: 'warning' });
         return;
     }
 
     navigator.clipboard.writeText(outputText.value)
         .then(() => {
-            const originalMessage = errorMessage.value;
-            errorMessage.value = '已复制到剪贴板';
-            setTimeout(() => errorMessage.value = originalMessage, 2000);
+            showMessage('复制成功', { type: 'success' });
         })
         .catch(err => {
             console.error('复制失败:', err);

@@ -2,33 +2,36 @@
 import { ref } from 'vue';
 import '@assets/styles/tool.css';
 import { invoke } from '@tauri-apps/api/core';
+import showMessage from '../utils/MessageService';
 
 const title = ref('WHOIS查询');
 const domain = ref('');
 const rawData = ref('');
 const parsedData = ref<any>(null);
-const isLoading = ref(false);
 const error = ref('');
 const showRaw = ref('parsed'); // 'raw' or 'parsed'
 
 // 查询 WHOIS
 const queryWhois = async () => {
     if (!domain.value) {
-        error.value = '请输入域名';
+        showMessage('请输入域名', { type: 'warning' });
         return;
+    } else {
+        showMessage('查询中...', { type: 'info', duration: 0.2 });
     }
 
-    isLoading.value = true;
     error.value = '';
 
     try {
-        const result:any = await invoke('query_whois', { domainName: domain.value });
+        const result: any = await invoke('query_whois', { domainName: domain.value });
         console.log('WHOIS 查询结果:', result);
         if (result.status !== 1) {
             error.value = result.message || '查询失败';
             parsedData.value = null;
             rawData.value = '';
             return;
+        } else {
+            showMessage('查询成功', { type: 'success' });
         }
         parsedData.value = result;
         rawData.value = JSON.stringify(result, null, 2);
@@ -37,8 +40,6 @@ const queryWhois = async () => {
         error.value = err instanceof Error ? err.message : '查询失败';
         parsedData.value = null;
         rawData.value = '';
-    } finally {
-        isLoading.value = false;
     }
 };
 
@@ -68,10 +69,6 @@ const clear = () => {
                     <button class="encode-btn" @click="queryWhois">查询</button>
                     <button class="clear-btn" @click="clear">清空</button>
                 </div>
-
-                <!-- 加载状态 -->
-                <div v-if="isLoading" class="loading">查询中...</div>
-
                 <!-- 错误提示 -->
                 <div v-if="error" class="error">{{ error }}</div>
 
@@ -100,6 +97,7 @@ const clear = () => {
                                     <td>{{ parsedData.status === 1 ? '是' : '否' }}</td>
                                 </tr>
                             </template>
+
                             <template v-if="parsedData.data">
                                 <tr>
                                     <td><strong>域名</strong></td>
@@ -121,18 +119,26 @@ const clear = () => {
                                     <td><strong>到期时间</strong></td>
                                     <td>{{ parsedData.data.info.expirationTime }}</td>
                                 </tr>
-                                <tr>
-                                    <td><strong>域名状态</strong></td>
-                                    <td>{{ parsedData.data.info.domainStatus.join(', ') }}</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>DNS 服务器</strong></td>
-                                    <td>{{ parsedData.data.info.nameServer[0] }}</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>DNS 服务器</strong></td>
-                                    <td>{{ parsedData.data.info.nameServer[1] || '无' }}</td>
-                                </tr>
+
+                                <!-- 动态显示数组内容 -->
+                                <template
+                                    v-if="parsedData.data.info.domainStatus && parsedData.data.info.domainStatus.length">
+                                    <tr v-for="(status, index) in parsedData.data.info.domainStatus"
+                                        :key="'status-' + index">
+                                        <td><strong>域名状态</strong></td>
+                                        <td>{{ status }}</td>
+                                    </tr>
+                                </template>
+
+                                <template
+                                    v-if="parsedData.data.info.nameServer && parsedData.data.info.nameServer.length">
+                                    <tr v-for="(server, index) in parsedData.data.info.nameServer"
+                                        :key="'nameserver-' + index">
+                                        <td><strong>DNS 服务器</strong></td>
+                                        <td>{{ server }}</td>
+                                    </tr>
+                                </template>
+
                                 <tr>
                                     <td><strong>WHOIS 服务器</strong></td>
                                     <td>{{ parsedData.data.info.whoisServer || '无' }}</td>

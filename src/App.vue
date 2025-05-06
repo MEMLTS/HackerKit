@@ -20,6 +20,7 @@ import gzipIcon from './assets/icons/mm-gzip.svg';
 import jwtIcon from './assets/icons/jwt.svg';
 import networkIcon from './assets/icons/network.svg';
 import whoisIcon from './assets/icons/whois.svg';
+import webSocketIcon from './assets/icons/WebSocket.svg';
 
 const router = useRouter();
 const isSidebarCollapsed = ref(false);
@@ -95,7 +96,8 @@ const toolGroups = ref<ToolGroup[]>([
     icon: networkIcon,
     isCollapsed: true,
     tools: [
-      { name: 'Whois', icon: whoisIcon, route: '/whois' }
+      { name: 'Whois', icon: whoisIcon, route: '/whois' },
+      { name: 'WebSocket', icon: webSocketIcon, route: '/websocket' },
     ]
   },
   {
