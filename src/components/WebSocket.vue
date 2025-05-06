@@ -82,12 +82,23 @@ const connectWebSocket = () => {
             stopAutoSend();
         };
 
-        ws.value.onerror = (error) => {
+        ws.value.onerror = (event) => {
             connectionStatus.value = '连接错误';
             showMessage('连接错误', { type: 'error' });
-            addMessage('system', `连接错误: ${error}`);
+            let errorMsg = '';
+            if (ws.value && ws.value.url) {
+                errorMsg = `WebSocket connection to '${ws.value.url}' failed: `;
+            }
+            if (event instanceof ErrorEvent) {
+                errorMsg += `Error in connection establishment: ${event.message}`;
+            } else {
+                errorMsg += event.type || '未知错误';
+            }
+            ws.value = null;
+            addMessage('system', errorMsg);
             stopAutoSend();
         };
+
 
         ws.value.onmessage = (event) => {
             let content = event.data;
@@ -253,7 +264,7 @@ onBeforeUnmount(() => {
                     <div class="message-container" id="message-box">
                         <div v-for="(msg, index) in messages" :key="index" class="message" :class="msg.type">
                             <span class="time">{{msg.type === 'sent' ? `[${msg.time}]=>` : msg.type === 'received' ?
-                                `[${msg.time}]<=`: `[${msg.time}]`}} </span>
+                                `[${msg.time}]<=` : `[${msg.time}]`}} </span>
                                     <span class="content">{{ msg.content }}</span>
                         </div>
                         <div v-if="messages.length === 0" class="no-messages">
