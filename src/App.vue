@@ -21,6 +21,7 @@ import jwtIcon from './assets/icons/jwt.svg';
 import networkIcon from './assets/icons/network.svg';
 import whoisIcon from './assets/icons/whois.svg';
 import webSocketIcon from './assets/icons/WebSocket.svg';
+import protobufIcon from './assets/icons/protobuf.svg';
 
 const router = useRouter();
 const isSidebarCollapsed = ref(false);
@@ -88,6 +89,7 @@ const toolGroups = ref<ToolGroup[]>([
       { name: '文本对比', icon: txtIcon, route: '/text-compare' },
       { name: 'Gzip工具', icon: gzipIcon, route: '/gzip' },
       { name: 'JWT解析', icon: jwtIcon, route: '/jwt' },
+      { name: 'Protobuf', icon: protobufIcon, route: '/protobuf' },
       //{ name: '时间工具', icon: toolsIcon, route: '/timestamp' }
     ]
   },

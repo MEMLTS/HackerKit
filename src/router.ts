@@ -10,6 +10,7 @@ import Gzip from './components/gzip.vue';
 import Jwt from './components/jwt.vue';
 import Whois from './components/whois.vue';
 import WebSocket from './components/WebSocket.vue';
+import Protobuf from './components/Protobuf.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -21,6 +22,7 @@ const router = createRouter({
     { path: '/text-compare', name: 'textCompare', component: textCompare },
     { path: '/gzip', name: 'GZIP', component: Gzip },
     { path: '/jwt', name: 'JWT', component: Jwt },
+    { path: '/protobuf', name: 'Protobuf', component: Protobuf },
     { path: '/whois', name: 'Whois', component: Whois },
     { path: '/webSocket', name: 'WebSocket', component: WebSocket },
     { path: '/system-info', name: 'SystemInfo', component: SystemInfo },
