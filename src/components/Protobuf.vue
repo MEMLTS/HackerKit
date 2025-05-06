@@ -68,72 +68,135 @@ function base64ToUint8Array(base64: string): Uint8Array {
   }
 }
 
-// 编码 Protobuf
 function encodeProtobuf(jsonData: any): Uint8Array {
   try {
     const root = new protobuf.Root();
     const DynamicMessage = new protobuf.Type('DynamicMessage');
     root.add(DynamicMessage);
 
-    Object.keys(jsonData).forEach((key, index) => {
-      const value = jsonData[key];
-      let type: string;
+    // 为了处理键是数字字符串的情况，我们需要确保创建有效的Protobuf字段名称
+    const sanitizeFieldName = (name: string): string => {
+      // 如果键是纯数字，添加前缀 "f_" 使其成为有效的字段名
+      if (/^\d+$/.test(name)) {
+        return `f_${name}`;
+      }
+      // 将任何非字母数字字符替换为下划线
+      return name.replace(/[^a-zA-Z0-9_]/g, '_');
+    };
 
-      if (typeof value === 'number') {
-        if (Number.isInteger(value)) {
-          type = value >= -2147483648 && value <= 2147483647 ? 'int32' : 'int64';
-        } else {
-          type = 'double';
+    // 为字段创建一个唯一的序号，避免冲突
+    const createFieldNumber = (key: string, index: number): number => {
+      // 如果键是纯数字，直接使用该数字作为字段编号（确保在有效范围内）
+      if (/^\d+$/.test(key)) {
+        const num = parseInt(key, 10);
+        // Protobuf 字段编号必须在 1-536870911 范围内
+        if (num > 0 && num < 536870911) {
+          return num;
         }
-      } else if (typeof value === 'boolean') {
-        type = 'bool';
-      } else if (typeof value === 'string') {
-        type = 'string';
-      } else if (Array.isArray(value)) {
-        if (value.length > 0) {
-          const firstElem = value[0];
-          type = typeof firstElem === 'number' ? 'int32' : typeof firstElem === 'boolean' ? 'bool' : 'string';
-        } else {
-          type = 'string'; // 空数组默认为字符串
-        }
-        DynamicMessage.add(new protobuf.Field(key, index + 1, type, { repeated: true }));
-        return;
-      } else if (value !== null && typeof value === 'object') {
-        const NestedType = new protobuf.Type(`Nested_${key}`);
-        root.add(NestedType);
+      }
+      // 否则使用索引加1（避免0）
+      return index + 1;
+    };
 
-        Object.keys(value).forEach((nestedKey, nestedIndex) => {
-          const nestedValue = value[nestedKey];
-          let nestedType: string;
+    const processObject = (obj: any, parentType: protobuf.Type, prefix: string = '', fieldNumberBase: number = 0) => {
+      Object.keys(obj).forEach((key, index) => {
+        const fieldName = sanitizeFieldName(key);
+        const fieldNumber = createFieldNumber(key, fieldNumberBase + index);
+        const value = obj[key];
+        let type: string;
 
-          if (typeof nestedValue === 'number') {
-            nestedType = Number.isInteger(nestedValue) ? 'int32' : 'float';
-          } else if (typeof nestedValue === 'boolean') {
-            nestedType = 'bool';
-          } else if (typeof nestedValue === 'string') {
-            nestedType = 'string';
+        if (typeof value === 'number') {
+          if (Number.isInteger(value)) {
+            type = value >= -2147483648 && value <= 2147483647 ? 'int32' : 'int64';
           } else {
-            nestedType = 'bytes'; // 深度嵌套对象暂时处理为bytes
+            type = 'double';
           }
+          parentType.add(new protobuf.Field(fieldName, fieldNumber, type));
+        } else if (typeof value === 'boolean') {
+          parentType.add(new protobuf.Field(fieldName, fieldNumber, 'bool'));
+        } else if (typeof value === 'string') {
+          parentType.add(new protobuf.Field(fieldName, fieldNumber, 'string'));
+        } else if (Array.isArray(value)) {
+          if (value.length > 0) {
+            const firstElem = value[0];
+            if (typeof firstElem === 'number') {
+              type = Number.isInteger(firstElem) ? 'int32' : 'double';
+            } else if (typeof firstElem === 'boolean') {
+              type = 'bool';
+            } else if (typeof firstElem === 'string') {
+              type = 'string';
+            } else if (firstElem !== null && typeof firstElem === 'object') {
+              // 创建嵌套类型来处理对象数组
+              const nestedTypeName = `${prefix}${fieldName}_Item`;
+              const NestedType = new protobuf.Type(nestedTypeName);
+              root.add(NestedType);
 
-          NestedType.add(new protobuf.Field(nestedKey, nestedIndex + 1, nestedType));
-        });
+              // 使用第一个对象来定义结构
+              processObject(firstElem, NestedType, `${nestedTypeName}_`, 0);
+              type = nestedTypeName;
+            } else {
+              type = 'bytes'; // 对于不能确定类型的情况
+            }
+          } else {
+            type = 'bytes'; // 空数组默认
+          }
+          parentType.add(new protobuf.Field(fieldName, fieldNumber, type, { repeated: true }));
+        } else if (value !== null && typeof value === 'object') {
+          // 嵌套对象
+          const nestedTypeName = `${prefix}${fieldName}`;
+          const NestedType = new protobuf.Type(nestedTypeName);
+          root.add(NestedType);
 
-        type = `Nested_${key}`;
-      } else {
-        type = 'string';
+          // 递归处理嵌套对象
+          processObject(value, NestedType, `${nestedTypeName}_`, 0);
+
+          parentType.add(new protobuf.Field(fieldName, fieldNumber, nestedTypeName));
+        } else {
+          // null 或 undefined
+          parentType.add(new protobuf.Field(fieldName, fieldNumber, 'bytes'));
+        }
+      });
+    };
+
+    // 处理顶层对象
+    processObject(jsonData, DynamicMessage);
+
+    // 解析所有类型引用
+    root.resolveAll();
+
+    // 深度递归处理对象，确保所有键都正确映射
+    const sanitizeData = (data: any): any => {
+      if (data === null || data === undefined) {
+        return null;
       }
 
-      DynamicMessage.add(new protobuf.Field(key, index + 1, type));
-    });
+      if (Array.isArray(data)) {
+        return data.map(item => sanitizeData(item));
+      }
 
-    const message = DynamicMessage.fromObject(jsonData);
+      if (typeof data === 'object') {
+        const result: any = {};
+        Object.keys(data).forEach(key => {
+          const sanitizedKey = sanitizeFieldName(key);
+          result[sanitizedKey] = sanitizeData(data[key]);
+        });
+        return result;
+      }
+
+      return data;
+    };
+
+    const sanitizedData = sanitizeData(jsonData);
+    const message = DynamicMessage.fromObject(sanitizedData);
     return DynamicMessage.encode(message).finish();
   } catch (err: any) {
     console.error('编码错误:', err);
+    console.error('错误详情:', err.stack);
     throw new Error(`Protobuf 编码失败: ${err.message}`);
   }
 }
+
+
 // 检查数据是否可能是 Protobuf 消息
 function isLikelyProtobuf(bytes: Uint8Array): boolean {
   if (bytes.length < 2) return false;
@@ -369,8 +432,8 @@ const copyOutput = () => {
 
         <!-- 输入区域 -->
         <div class="input-group">
-          <JsonTextarea v-model="inputText" :placeholder="operationType === 'decode' ? '输入Protobuf数据...' : '输入JSON数据...'"
-            :readonly="false"/>
+          <JsonTextarea v-model="inputText"
+            :placeholder="operationType === 'decode' ? '输入Protobuf数据...' : '输入JSON数据...'" :readonly="false" />
         </div>
 
         <!-- 操作按钮 -->
@@ -384,7 +447,7 @@ const copyOutput = () => {
         <!-- 输出区域 -->
         <div class="output-group">
           <JsonTextarea v-model="outputText" :placeholder="operationType === 'decode' ? '解码结果...' : '编码结果...'"
-            :readonly="true" :collapsible="true"/>
+            :readonly="true" :collapsible="true" />
         </div>
       </div>
     </div>
@@ -392,5 +455,4 @@ const copyOutput = () => {
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
