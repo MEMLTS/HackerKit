@@ -88,6 +88,7 @@ const clear = () => {
     fileInfo.value = null;
     isFileMode.value = false;
     isAllMode.value = false; // 重置全部计算模式
+    showMessage('已清空', { type: 'success' });
 };
 
 // 按钮弹窗

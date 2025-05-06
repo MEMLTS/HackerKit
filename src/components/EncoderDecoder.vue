@@ -32,6 +32,7 @@ const encodeBase64 = (text: string) => {
         outputText.value = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(text));
     } catch (e: any) {
         outputText.value = '编码失败：' + e.message;
+        showMessage('编码失败', { type: 'error' });
     }
 };
 
@@ -40,6 +41,7 @@ const decodeBase64 = (text: string) => {
         outputText.value = CryptoJS.enc.Utf8.stringify(CryptoJS.enc.Base64.parse(text));
     } catch (e) {
         outputText.value = '解码失败：无效的Base64字符串';
+        showMessage('解码失败', { type: 'error' });
     }
 };
 
@@ -48,6 +50,7 @@ const encodeURL = (text: string) => {
         outputText.value = encodeURIComponent(text);
     } catch (e: any) {
         outputText.value = '编码失败：' + e.message;
+        showMessage('编码失败', { type: 'error' });
     }
 };
 
@@ -56,6 +59,7 @@ const decodeURL = (text: string) => {
         outputText.value = decodeURIComponent(text);
     } catch (e) {
         outputText.value = '解码失败：无效的URL字符串';
+        showMessage('解码失败', { type: 'error' });
     }
 };
 
@@ -64,6 +68,7 @@ const encodeHex = (text: string) => {
         outputText.value = CryptoJS.enc.Hex.stringify(CryptoJS.enc.Utf8.parse(text));
     } catch (e: any) {
         outputText.value = '编码失败：' + e.message;
+        showMessage('编码失败', { type: 'error' });
     }
 };
 
@@ -72,6 +77,7 @@ const decodeHex = (text: string) => {
         outputText.value = CryptoJS.enc.Utf8.stringify(CryptoJS.enc.Hex.parse(text));
     } catch (e) {
         outputText.value = '解码失败：无效的HEX字符串';
+        showMessage('解码失败', { type: 'error' });
     }
 };
 
@@ -82,6 +88,7 @@ const encodeUnicode = (text: string) => {
         outputText.value = CryptoJS.SHA256(text).toString(CryptoJS.enc.Base64);
     } catch (e: any) {
         outputText.value = '编码失败：' + e.message;
+        showMessage('编码失败', { type: 'error' });
     }
 };
 
@@ -91,6 +98,7 @@ const decodeUnicode = (text: string) => {
         outputText.value = text.replace(/\\u([\dA-Fa-f]{4})/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
     } catch (e) {
         outputText.value = '解码失败：无效的Unicode字符串';
+        showMessage('解码失败', { type: 'error' });
     }
 };
 
@@ -101,6 +109,7 @@ const encodeASCII = (text: string) => {
         outputText.value = CryptoJS.SHA256(text).toString(CryptoJS.enc.Base64);
     } catch (e: any) {
         outputText.value = '编码失败：' + e.message;
+        showMessage('编码失败', { type: 'error' });
     }
 };
 
@@ -109,6 +118,7 @@ const decodeASCII = (text: string) => {
         outputText.value = text.split(' ').map(c => String.fromCharCode(parseInt(c))).join('');
     } catch (e) {
         outputText.value = '解码失败：无效的ASCII字符串';
+        showMessage('解码失败', { type: 'error' });
     }
 };
 
@@ -120,6 +130,7 @@ const encodePunycode = (text: string) => {
         outputText.value = punycode.encode(text);
     } catch (e: any) {
         outputText.value = '编码失败：' + e.message;
+        showMessage('编码失败', { type: 'error' });
     }
 };
 
@@ -128,6 +139,7 @@ const decodePunycode = (text: string) => {
         outputText.value = punycode.decode(text);
     } catch (e) {
         outputText.value = '解码失败：无效的Punycode字符串';
+        showMessage('解码失败', { type: 'error' });
     }
 };
 
@@ -160,6 +172,7 @@ const decode = () => {
 const clear = () => {
     inputText.value = '';
     outputText.value = '';
+    showMessage('已清空', { type: 'success' });
 };
 
 const swap = () => {

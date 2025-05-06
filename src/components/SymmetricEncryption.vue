@@ -221,6 +221,7 @@ const decrypt = () => {
 const clear = () => {
     inputText.value = '';
     outputText.value = '';
+    showMessage('已清空', { type: 'success' });
 };
 
 // 弹窗组件

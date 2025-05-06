@@ -54,6 +54,7 @@ const clear = () => {
     rawData.value = '';
     parsedData.value = null;
     domain.value = '';
+    showMessage('已清空', { type: 'success' });
 };
 </script>
 

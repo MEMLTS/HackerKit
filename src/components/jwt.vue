@@ -386,7 +386,7 @@ const clearAll = () => {
                     </div>
 
                     <!-- JWT解析显示区域 -->
-                    <div v-if="operationType !== 'encode' && Object.keys(jwtHeader).length > 0" class="jwt-parsed-info">
+                    <div v-if="operationType == 'decode' && Object.keys(jwtHeader).length > 0" class="jwt-parsed-info">
                         <div class="jwt-section">
                             <h3>头部 (Header)</h3>
                             <div class="jwt-content">

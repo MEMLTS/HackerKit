@@ -168,6 +168,7 @@ const clearAll = () => {
     inputText.value = '';
     outputText.value = '';
     errorMessage.value = '';
+    showMessage('已清空', { type: 'success' });
 };
 </script>
 
