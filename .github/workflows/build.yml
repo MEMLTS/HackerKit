@@ -48,17 +48,6 @@ jobs:
           sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
         # webkitgtk 4.0 用于 Tauri v1 - webkitgtk 4.1 用于 Tauri v2
         # 可以删除不适用于你的应用的依赖，以加速工作流
-
-      - name: 缓存依赖项 (Cache dependencies) ⏳
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.pnpm-store
-            node_modules
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-
       - name: 安装 pnpm 📦
         run: npm install -g pnpm
 
