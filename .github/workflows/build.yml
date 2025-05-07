@@ -1,4 +1,4 @@
-name: "publish"
+name: "发布 (Publish) 🚀"
 
 on:
   push:
@@ -12,42 +12,42 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - platform: "macos-latest" # for Arm based macs (M1 and above).
+          - platform: "macos-latest" # 针对基于 Arm 架构的 Mac（M1 及以上）💻
             args: "--target aarch64-apple-darwin"
-          - platform: "macos-latest" # for Intel based macs.
+          - platform: "macos-latest" # 针对基于 Intel 架构的 Mac 🍏
             args: "--target x86_64-apple-darwin"
-          - platform: "ubuntu-22.04" # for Tauri v1 you could replace this with ubuntu-20.04.
+          - platform: "ubuntu-22.04" # 针对 Ubuntu 22.04（Tauri v1 可替换为 ubuntu-20.04）
             args: ""
-          - platform: "windows-latest"
+          - platform: "windows-latest" # 针对 Windows 系统
             args: ""
-          - platform: "ubuntu-22.04" # for ARM64 architecture on Ubuntu
-            args: "--target aarch64-unknown-linux-gnu" # Adding ARM support for Ubuntu (Linux ARM64)
-          - platform: "windows-latest" # for ARM64 architecture on Windows
-            args: "--target aarch64-pc-windows-msvc" # Adding ARM support for Windows (ARM64)
+          - platform: "ubuntu-22.04" # 针对 Ubuntu 上的 ARM64 架构 🖥️
+            args: "--target aarch64-unknown-linux-gnu" # 为 Ubuntu (Linux ARM64) 添加 ARM 支持
+          - platform: "windows-latest" # 针对 Windows 上的 ARM64 架构
+            args: "--target aarch64-pc-windows-msvc" # 为 Windows (ARM64) 添加 ARM 支持
 
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: setup node
+      - name: 设置 Node.js 环境 (Setup Node.js) 🌐
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
 
-      - name: install Rust stable
+      - name: 安装稳定版 Rust (Install Rust stable) 🦀
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
 
-      - name: install dependencies (ubuntu only)
-        if: matrix.platform == 'ubuntu-22.04' || matrix.platform == 'ubuntu-22.04' # This must match the platform value defined above.
+      - name: 安装依赖 (仅限 Ubuntu) 🛠️
+        if: matrix.platform == 'ubuntu-22.04' || matrix.platform == 'ubuntu-22.04' # 这必须与上面定义的平台匹配
         run: |
           sudo apt-get update
           sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
-        # webkitgtk 4.0 is for Tauri v1 - webkitgtk 4.1 is for Tauri v2.
-        # You can remove the one that doesn't apply to your app to speed up the workflow a bit.
+        # webkitgtk 4.0 用于 Tauri v1 - webkitgtk 4.1 用于 Tauri v2
+        # 可以删除不适用于你的应用的依赖，以加速工作流
 
-      - name: Cache dependencies
+      - name: 缓存依赖项 (Cache dependencies) ⏳
         uses: actions/cache@v3
         with:
           path: |
@@ -57,14 +57,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-
 
-      - name: Install pnpm
+      - name: 安装 pnpm 📦
         run: npm install -g pnpm
 
-      - name: Install frontend dependencies
-        run: pnpm install # Change this to npm, yarn or pnpm.
-
-      - name: Run tests (optional)
-        run: pnpm test # If you have a test script, this will run your tests.
+      - name: 安装前端依赖项 (Install frontend dependencies) ⚙️
+        run: pnpm install # 可以根据需要替换为 npm、yarn 或 pnpm
 
       - name: 🚀 运行 release-please，生成版本和 Release Notes
         id: release
@@ -72,7 +69,8 @@ jobs:
         with:
           config-file: .github/workflows/.release-please-config.json
           manifest-file: .github/workflows/.release-please-manifest.json
-      - name: Build the app
+
+      - name: 构建应用 (Build the app) 🔧
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
