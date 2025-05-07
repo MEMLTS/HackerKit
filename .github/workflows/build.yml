@@ -2,6 +2,8 @@ name: "发布 (Publish) 🚀"
 
 on:
   push:
+    branches:
+      - main
     tags:
       - 'v*'
 permissions: write-all
