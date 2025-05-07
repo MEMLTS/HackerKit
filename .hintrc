@@ -11,6 +11,8 @@
           "scrollbar-width: none"
         ]
       }
-    ]
+    ],
+    "typescript-config/consistent-casing": "off",
+    "typescript-config/strict": "off"
   }
 }

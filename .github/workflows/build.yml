@@ -2,8 +2,8 @@ name: "发布 (Publish) 🚀"
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - 'v*'
 permissions: write-all
 
 jobs:
@@ -76,7 +76,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tagName: ${{ steps.release.outputs.tag_name }}
-          releaseName: ${{ steps.release.outputs.tag_name }}
+          releaseName: 'App v__VERSION__'
           releaseBody: ${{ steps.release.outputs.release_notes }}
           releaseDraft: true
           prerelease: false
