@@ -2,23 +2,13 @@ name: 'publish'
 
 on:
   push:
-      # Sequence of patterns matched against refs/tags
-      tags:
-          - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
-  workflow_dispatch:
-
-
-# This workflow will trigger on each push to the `release` branch to create or update a GitHub release, build your app, and upload the artifacts to the release.
+    branches:
+      - main
+permissions: write-all
 
 jobs:
   publish-tauri:
-    permissions:
-      contents: write
-      actions: write
-      attestations: write
-      deployments: write
-      packages: write
-      id-token: write
+
     strategy:
       fail-fast: false
       matrix:
