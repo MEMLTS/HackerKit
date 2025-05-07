@@ -29,16 +29,6 @@
           <h3>全面工具</h3>
           <p>提供从开发到设计的一整套工具，帮助你在工作中更加得心应手。</p>
         </div>
-        <div class="feature-card">
-          <span class="feature-icon">📈</span>
-          <h3>数据分析</h3>
-          <p>提供强大的数据分析工具，让你轻松分析和展示数据，洞察一切。</p>
-        </div>
-        <div class="feature-card">
-          <span class="feature-icon">💻</span>
-          <h3>开发支持</h3>
-          <p>为开发者提供高效的编码、调试、版本控制等工具，助力快速开发。</p>
-        </div>
       </div>
     </div>
   </div>
