@@ -1,0 +1,5 @@
+{
+    "version": "v1.0.0",
+    "target-branch": "main",
+    "release-type": "node"
+}
