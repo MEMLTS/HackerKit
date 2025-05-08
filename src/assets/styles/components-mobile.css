@@ -1,0 +1,411 @@
+/* 组件移动端适配样式 */
+@media (max-width: 768px) {
+  /* Hash 组件 */
+  .setting-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .setting-group select {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .file-info {
+    margin: 1rem 0;
+    padding: 1rem;
+  }
+
+  .file-details p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+  }
+
+  /* JWT 组件 */
+  .jwt-parts {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .jwt-part {
+    width: 100%;
+  }
+
+  /* WebSocket 组件 */
+  .ws-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ws-messages {
+    height: 300px;
+  }
+
+  /* 文本对比组件 */
+  .compare-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .compare-panel {
+    width: 100%;
+  }
+
+  /* 加密解密组件 */
+  .encryption-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .key-input {
+    width: 100%;
+  }
+
+  /* Protobuf 组件 */
+  .protobuf-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .protobuf-panel {
+    width: 100%;
+  }
+
+  /* 通用表单元素 */
+  input[type="text"],
+  input[type="number"],
+  input[type="password"],
+  input[type="url"],
+  select {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+  }
+
+  /* 按钮组 */
+  .button-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    margin: 1rem 0;
+  }
+
+  .button-group button,
+  .button-group label {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  /* 文本区域 */
+  textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+  }
+
+  /* 输出区域 */
+  .output-group {
+    margin-top: 1rem;
+  }
+
+  .all-outputs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .all-outputs textarea {
+    margin-bottom: 0.5rem;
+  }
+
+  /* 标签和标题 */
+  label {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+    display: block;
+  }
+
+  h2, h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+
+  /* 卡片样式 */
+  .feature-card {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  /* 表格样式 */
+  table {
+    width: 100%;
+    font-size: 0.9rem;
+  }
+
+  th, td {
+    padding: 0.5rem;
+    word-break: break-word;
+  }
+
+  /* 代码块 */
+  pre {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  /* 警告和提示 */
+  .alert, .notice {
+    padding: 0.75rem;
+    margin: 0.75rem 0;
+    font-size: 0.9rem;
+  }
+
+  /* 模态框 */
+  .modal-content {
+    width: 90%;
+    max-width: none;
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+  /* 文件上传 */
+  .file-upload {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px dashed var(--border-color);
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  /* 工具提示 */
+  .tooltip {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+  }
+
+  /* Whois 组件 */
+  .search-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .search-box input {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+  }
+
+  .search-box .button-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .search-box button {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .tabs {
+    display: flex;
+    border-bottom: 2px solid var(--border-color);
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .result-container {
+    margin-top: 1rem;
+  }
+
+  .parsed-data {
+    display: block;
+  }
+
+  .parsed-data table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .parsed-data td {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+  }
+
+  .parsed-data td:first-child {
+    background-color: var(--hover-bg);
+    font-weight: 500;
+  }
+
+  .parsed-data td:last-child {
+    margin-bottom: 0.5rem;
+  }
+
+  .raw-data {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .error {
+    padding: 0.75rem;
+    margin: 0.75rem 0;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    background-color: var(--error-bg);
+  }
+
+  /* 模态框组件 */
+  .modal-container {
+    width: 90%;
+    max-width: none;
+    margin: 1rem;
+    border-radius: 8px;
+  }
+
+  .modal-header {
+    padding: 1rem;
+  }
+
+  .modal-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .close-btn {
+    font-size: 1.5rem;
+    padding: 0.5rem;
+  }
+
+  .modal-body {
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .modal-footer {
+    padding: 1rem;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .modal-footer button {
+    flex: 1;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  /* JSON 文本区域组件 */
+  .json-textarea-container {
+    width: 100%;
+  }
+
+  .json-viewer,
+  .json-input {
+    min-height: 150px;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .json-viewer {
+    overflow-x: auto;
+    white-space: pre;
+    word-wrap: normal;
+  }
+
+  /* 自动关闭模态框 */
+  .auto-close-modal {
+    min-width: auto;
+    width: 90%;
+    max-width: 320px;
+    padding: 12px;
+    top: 10px;
+    opacity: 0.95;
+  }
+
+  .auto-close-modal .modal-content {
+    gap: 8px;
+  }
+
+  .auto-close-modal .modal-icon {
+    margin-right: 8px;
+    font-size: 18px;
+  }
+
+  .auto-close-modal .modal-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .auto-close-modal .modal-body {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .auto-close-modal .modal-close {
+    margin-left: 8px;
+    font-size: 14px;
+  }
+
+  .auto-close-modal .modal-progress {
+    height: 2px;
+  }
+
+  /* 调整动画效果 */
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -10px);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+  }
+
+  /* 通用动画优化 */
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.2s ease;
+  }
+
+  /* 触摸优化 */
+  button {
+    min-height: 44px;
+  }
+
+  input,
+  textarea,
+  select {
+    font-size: 16px; /* 防止 iOS 自动缩放 */
+  }
+} 

@@ -2,6 +2,8 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import './assets/styles/theme.css';
+import './assets/styles/mobile.css';
+import './assets/styles/components-mobile.css';
 
 // 导入SVG图标
 import wrenchIcon from './assets/icons/wrench.svg';
@@ -27,6 +29,8 @@ const router = useRouter();
 const isSidebarCollapsed = ref(false);
 const isDarkMode = ref(false);
 const isManualMode = ref(false);
+const isMobile = ref(window.innerWidth <= 768);
+const isMobileSidebarOpen:any = ref(false);
 
 // 在主题切换时调用
 const updateTheme = () => {
@@ -47,6 +51,14 @@ const handleSystemThemeChange = (e: MediaQueryListEvent) => {
   }
 };
 
+// 监听窗口大小变化
+const handleResize = () => {
+  isMobile.value = window.innerWidth <= 768;
+  if (!isMobile.value) {
+    isMobileSidebarOpen.value = false;
+  }
+};
+
 // 页面加载时初始化主题
 onMounted(() => {
   const savedTheme = localStorage.getItem('themePreference');
@@ -58,10 +70,12 @@ onMounted(() => {
   }
   updateTheme();
   mediaQuery.addEventListener('change', handleSystemThemeChange);
+  window.addEventListener('resize', handleResize);
 });
 
 onBeforeUnmount(() => {
   mediaQuery.removeEventListener('change', handleSystemThemeChange);
+  window.removeEventListener('resize', handleResize);
 });
 
 interface Tool {
@@ -121,6 +135,7 @@ const toolGroups = ref<ToolGroup[]>([
   }
 ]);
 
+
 const toggleTheme = () => {
   isDarkMode.value = !isDarkMode.value;
   isManualMode.value = true;
@@ -139,43 +154,77 @@ const toggleSidebar = () => {
 const toggleGroup = (group: ToolGroup) => {
   group.isCollapsed = !group.isCollapsed;
 };
+
+const toggleMobileSidebar = () => {
+  isMobileSidebarOpen.value = !isMobileSidebarOpen.value;
+};
 </script>
 
 <template>
   <div class="app-container">
-    <!-- 侧边栏 -->
-    <aside :class="['sidebar', { 'collapsed': isSidebarCollapsed }]">
-      <div class="sidebar-header">
-        <h1 class="app-title" @click="router.push('/')">HackerKit</h1>
-        <button class="collapse-btn" @click="toggleSidebar">
-          {{ isSidebarCollapsed ? '→' : '←' }}
+    <!-- 移动端顶部导航 -->
+    <div v-if="isMobile" class="mobile-header">
+      <div class="mobile-nav">
+        <button class="mobile-menu-btn" @click="toggleMobileSidebar">
+          <img class="tool-icon" :src="moreIcon" alt="更多">
         </button>
         <button class="theme-toggle-btn" @click="toggleTheme">
           <img class="tool-icon" :src="isDarkMode ? sunIcon : moonIcon" alt="">
+        </button>
+      </div>
+    </div>
+
+    <!-- 侧边栏 -->
+    <aside :class="['sidebar', { 
+      'collapsed': isSidebarCollapsed, 
+      'hidden-mobile': isMobile && !isMobileSidebarOpen,
+      'mobile-sidebar': isMobile
+    }]">
+      <div class="sidebar-header">
+        <h1 class="app-title" @click="router.push('/')">HackerKit</h1>
+        <button v-if="!isMobile" class="collapse-btn" @click="toggleSidebar">
+          {{ isSidebarCollapsed ? '→' : '←' }}
+        </button>
+        <button v-if="isMobile" class="close-btn" @click="toggleMobileSidebar">
+          ✕
         </button>
       </div>
       <nav class="sidebar-nav">
         <div v-for="group in toolGroups" :key="group.name" class="tool-group">
           <div class="group-header" @click="toggleGroup(group)">
             <img class="tool-icon" :src="group.icon" alt="">
-            <span class="group-name" v-show="!isSidebarCollapsed">{{ group.name }}</span>
-            <span class="group-toggle" v-show="!isSidebarCollapsed">
+            <span class="group-name">{{ group.name }}</span>
+            <span class="group-toggle">
               {{ group.isCollapsed ? '▼' : '▲' }}
             </span>
           </div>
           <div class="group-tools" :class="{ 'collapsed': group.isCollapsed }">
             <a v-for="tool in group.tools" :key="tool.route"
-              :class="['nav-item', { active: $route.path === tool.route }]" @click="() => { if (router && tool && tool.route) router.push(tool.route) }">
+              :class="['nav-item', { active: $route.path === tool.route }]" 
+              @click="() => { 
+                if (router && tool && tool.route) {
+                  router.push(tool.route);
+                  if (isMobile) {
+                    isMobileSidebarOpen.value = false;
+                  }
+                }
+              }">
               <img class="tool-icon" :src="tool.icon" alt="">
-              <span class="tool-name" v-show="!isSidebarCollapsed">{{ tool.name }}</span>
+              <span class="tool-name">{{ tool.name }}</span>
             </a>
           </div>
         </div>
       </nav>
     </aside>
 
+    <!-- 移动端遮罩层 -->
+    <div v-if="isMobile && isMobileSidebarOpen" 
+         class="mobile-overlay" 
+         @click="toggleMobileSidebar">
+    </div>
+
     <!-- 主内容区域 -->
-    <main class="main-content">
+    <main :class="['main-content', { 'mobile': isMobile }]">
       <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
           <component :is="Component" />
@@ -349,6 +398,109 @@ const toggleGroup = (group: ToolGroup) => {
 
   .main-content {
     margin-left: 0;
+  }
+}
+
+.mobile-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--bg-color);
+  border-bottom: 1px solid var(--border-color);
+  z-index: 1000;
+  padding: 0.5rem 1rem;
+}
+
+.mobile-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mobile-menu-btn {
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-menu-btn .tool-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.mobile-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 280px;
+  z-index: 1001;
+  transform: translateX(0);
+  transition: transform 0.3s ease;
+  background-color: var(--bg-color);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-sidebar.hidden-mobile {
+  transform: translateX(-100%);
+}
+
+.mobile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  transition: opacity 0.3s ease;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    display: block;
+  }
+
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+    margin-top: 3.5rem;
+    padding: 1rem;
+  }
+
+  .group-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .nav-item {
+    padding: 0.75rem 1rem;
+  }
+
+  .tool-icon {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+
+  .group-name, .tool-name {
+    font-size: 0.9rem;
   }
 }
 </style>
